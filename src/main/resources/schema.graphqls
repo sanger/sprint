@@ -1,0 +1,98 @@
+# Enums
+enum BarcodeType {
+    ean13
+    code128
+    datamatrix
+}
+
+enum Font {
+    mono
+    proportional
+}
+
+enum PrinterLanguage {
+    jscript
+    tec
+}
+
+enum Protocol {
+    lpd
+    ftp
+}
+
+enum Rotation {
+    north
+    east
+    south
+    west
+}
+
+enum PrintStatus {
+    failed
+    succeeded
+    notFound
+    inProgress
+    unsupported
+}
+
+enum StatusProtocol {
+    soap
+}
+
+# Required Types
+type Query {
+    printers: [Printer!]!
+    printStatus(id: String!, printer: String!): PrintStatus!
+}
+
+# Mutations
+type Mutation {
+    print(printRequest: PrintRequest!, printer: String!): PrintResult
+}
+
+# label: PrintRequest!, printer: String!
+
+# Types
+type Printer {
+    name: String!
+    protocol: Protocol!
+    statusProtocol: StatusProtocol
+    language: PrinterLanguage!
+    status: String
+}
+
+type PrintResult {
+    id: String!
+}
+
+
+input PrintRequest {
+    labelWidth: Int!
+    labelHeight: Int!
+    layouts: [Layout!]!
+}
+
+input Layout {
+    barcodeFields: [BarcodeField!]
+    textFields: [TextField!]
+}
+
+# Input Types
+input BarcodeField {
+    x: Int!
+    y: Int!
+    cellWidth: Int!
+    labelHeight: Int
+    rotation: Rotation
+    barcodeType: BarcodeType!
+    value: String!
+}
+
+input TextField {
+    x: Int!
+    y: Int!
+    rotation: Rotation
+    font: Font!
+    fontSize: Int!
+    value: String!
+}

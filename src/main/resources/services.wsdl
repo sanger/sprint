@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.cab.de/WSSchema" name="cabPrinterWebService" targetNamespace="http://www.cab.de/WSSchema">
+  <documentation>This is a cab Printer Web Service.</documentation>
+  <types>
+    <xsd:schema elementFormDefault="qualified" targetNamespace="http://www.cab.de/WSSchema">
+      <xsd:element name="statusRequest" type="xsd:string"/>
+      <xsd:element name="statusResponse" type="xsd:string"/>
+      <xsd:element name="listOfFormatsRequest">
+        <xsd:complexType>
+          <xsd:sequence/>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:complexType name="format">
+        <xsd:sequence>
+          <xsd:element name="name" type="xsd:string"/>
+          <xsd:element name="description" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:element name="listOfFormatsResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="format" minOccurs="0" maxOccurs="unbounded" type="tns:format"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="listOfObjectsRequest">
+        <xsd:complexType>
+          <xsd:sequence/>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:complexType name="objectType">
+        <xsd:sequence>
+          <xsd:element name="name" type="xsd:string"/>
+          <xsd:element name="type" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:element name="listOfObjectsResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="fObject" minOccurs="0" maxOccurs="unbounded" type="tns:objectType"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="listOfJobsRequest">
+        <xsd:complexType>
+          <xsd:sequence/>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:complexType name="job">
+        <xsd:sequence>
+          <xsd:element name="id" type="xsd:string"/>
+          <xsd:element name="date" type="xsd:date"/>
+          <xsd:element name="time" type="xsd:time"/>
+          <xsd:element name="status" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:element name="listOfJobsResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="job" minOccurs="0" maxOccurs="unbounded" type="tns:job"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="loadFormatRequest" type="xsd:string"/>
+      <xsd:complexType name="loadFormat">
+        <xsd:sequence>
+          <xsd:element name="generic" type="xsd:string"/>
+          <xsd:element name="result" type="xsd:boolean"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:element name="loadFormatResponse" type="tns:loadFormat"/>
+      <xsd:complexType name="objectTypePrint">
+        <xsd:sequence>
+          <xsd:element name="name" type="xsd:string"/>
+          <xsd:element name="value" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="printFormat">
+        <xsd:sequence>
+          <xsd:element name="objects">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="fObject" minOccurs="0" maxOccurs="unbounded" type="tns:objectTypePrint"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="jobID" type="xsd:string"/>
+          <xsd:element name="numbers" type="xsd:int"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:element name="printFormatRequest" type="tns:printFormat"/>
+      <xsd:element name="printFormatResponse" type="tns:loadFormat"/>
+      <xsd:complexType name="abortAllJobs">
+        <xsd:sequence>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:element name="abortAllJobsRequest">
+        <xsd:complexType>
+          <xsd:sequence/>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="abortAllJobsResponse">
+        <xsd:complexType>
+          <xsd:sequence/>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:complexType name="faultType">
+        <xsd:sequence>
+          <xsd:element name="faultCode" type="xsd:string"/>
+          <xsd:element name="faultString" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:element name="faultResponse" type="tns:faultType"/>
+    </xsd:schema>
+  </types>
+  <message name="getPrinterStatusRequest">
+    <part name="parameters" element="tns:statusRequest"/>
+  </message>
+  <message name="getPrinterStatusResponse">
+    <part name="parameters" element="tns:statusResponse"/>
+  </message>
+  <message name="getListOfFormatsRequest">
+    <part name="parameters" element="tns:listOfFormatsRequest"/>
+  </message>
+  <message name="getListOfFormatsResponse">
+    <part name="parameters" element="tns:listOfFormatsResponse"/>
+  </message>
+  <message name="getListOfObjectsRequest">
+    <part name="parameters" element="tns:listOfObjectsRequest"/>
+  </message>
+  <message name="getListOfObjectsResponse">
+    <part name="parameters" element="tns:listOfObjectsResponse"/>
+  </message>
+  <message name="getListOfJobsRequest">
+    <part name="parameters" element="tns:listOfJobsRequest"/>
+  </message>
+  <message name="getListOfJobsResponse">
+    <part name="parameters" element="tns:listOfJobsResponse"/>
+  </message>
+  <message name="loadFormatRequest">
+    <part name="parameters" element="tns:loadFormatRequest"/>
+  </message>
+  <message name="loadFormatResponse">
+    <part name="parameters" element="tns:loadFormatResponse"/>
+  </message>
+  <message name="printFormatRequest">
+    <part name="parameters" element="tns:printFormatRequest"/>
+  </message>
+  <message name="printFormatResponse">
+    <part name="parameters" element="tns:printFormatResponse"/>
+  </message>
+  <message name="abortAllJobsRequest">
+    <part name="parameters" element="tns:abortAllJobsRequest"/>
+  </message>
+  <message name="abortAllJobsResponse">
+    <part name="parameters" element="tns:abortAllJobsResponse"/>
+  </message>
+  <message name="faultResponse">
+    <part name="Error" element="tns:faultResponse"/>
+  </message>
+  <portType name="cabPrinterSOAP">
+    <operation name="getPrinterStatus">
+      <documentation>Printer Status.
+Input Values: ESCs, ESCz, ESCi, ESCl, ESCa, ESCj, ESC?, Generic, Label
+Output Values:
+Generic: A generic Printer Status,
+Label: The loaded Label,
+Other: see Programming manual
+</documentation>
+      <input message="tns:getPrinterStatusRequest"/>
+      <output message="tns:getPrinterStatusResponse"/>
+      <fault name="faultResponse" message="tns:faultResponse"/>
+    </operation>
+    <operation name="getlistOfFormats">
+      <documentation>List of Formats.
+Input Value: void
+Output Value: The Lables stored on the primary card slot</documentation>
+      <input message="tns:getListOfFormatsRequest"/>
+      <output message="tns:getListOfFormatsResponse"/>
+      <fault name="faultResponse" message="tns:faultResponse"/>
+    </operation>
+    <operation name="getlistOfObjects">
+      <documentation>List of Objects from the loaded Format.
+Input Value: void
+Output Value: The Objects from the loaded Format</documentation>
+      <input message="tns:getListOfObjectsRequest"/>
+      <output message="tns:getListOfObjectsResponse"/>
+      <fault name="faultResponse" message="tns:faultResponse"/>
+    </operation>
+    <operation name="getlistOfJobs">
+      <documentation>List of last printer Jobs.
+Input Value: void
+Output Value: The last Printer Jobs</documentation>
+      <input message="tns:getListOfJobsRequest"/>
+      <output message="tns:getListOfJobsResponse"/>
+      <fault name="faultResponse" message="tns:faultResponse"/>
+    </operation>
+    <operation name="loadFormat">
+      <documentation>Load Format.
+Input Value: The name from the Format
+Output Value: A processing status</documentation>
+      <input message="tns:loadFormatRequest"/>
+      <output message="tns:loadFormatResponse"/>
+      <fault name="faultResponse" message="tns:faultResponse"/>
+    </operation>
+    <operation name="printFormat">
+      <documentation>Print Format.
+Input Values:
+The objects (name and value) from the label
+The JobID from the label
+ The number of labels
+Output Value: A processing status</documentation>
+      <input message="tns:printFormatRequest"/>
+      <output message="tns:printFormatResponse"/>
+      <fault name="faultResponse" message="tns:faultResponse"/>
+    </operation>
+    <operation name="abortAllJobs">
+      <documentation>Reset the printer.
+Input Value: void
+Output Value: A processing status</documentation>
+      <input message="tns:abortAllJobsRequest"/>
+      <output message="tns:abortAllJobsResponse"/>
+      <fault name="faultResponse" message="tns:faultResponse"/>
+    </operation>
+  </portType>
+  <binding name="cabSOAPBinding" type="tns:cabPrinterSOAP">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+    <operation name="getPrinterStatus">
+      <soap:operation soapAction="status" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="faultResponse">
+        <soap:fault name="faultResponse" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="getlistOfFormats">
+      <soap:operation soapAction="formatlist" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="faultResponse">
+        <soap:fault name="faultResponse" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="getlistOfObjects">
+      <soap:operation soapAction="objectlist" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="faultResponse">
+        <soap:fault name="faultResponse" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="getlistOfJobs">
+      <soap:operation soapAction="joblist" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="faultResponse">
+        <soap:fault name="faultResponse" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="loadFormat">
+      <soap:operation soapAction="loadformat" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="faultResponse">
+        <soap:fault name="faultResponse" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="printFormat">
+      <soap:operation soapAction="printformat" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="faultResponse">
+        <soap:fault name="faultResponse" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="abortAllJobs">
+      <soap:operation soapAction="abortAllJobs" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="faultResponse">
+        <soap:fault name="faultResponse" use="literal"/>
+      </fault>
+    </operation>
+  </binding>
+  <service name="cabPrinterWebService">
+    <documentation>Web Service for cab label printers</documentation>
+    <port name="PrinterWebServiceSOAP" binding="tns:cabSOAPBinding">
+      <soap:address location="http://cgaptestbc.internal.sanger.ac.uk/cgi-bin/soap/printerservice"/>
+    </port>
+  </service>
+</definitions>
