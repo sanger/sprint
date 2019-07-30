@@ -1,10 +1,11 @@
 package uk.ac.sanger.printy.model;
 
+import java.util.Collections;
 import java.util.List;
 
 public class Layout {
-    private List<TextField> textFields;
-    private List<BarcodeField> barcodeFields;
+    private List<TextField> textFields = Collections.emptyList();
+    private List<BarcodeField> barcodeFields = Collections.emptyList();
 
     public List<TextField> getTextFields() {
         return textFields;

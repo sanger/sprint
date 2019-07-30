@@ -1,8 +1,8 @@
 package uk.ac.sanger.printy.model;
 
 public enum PrintStatus {
-    failed,
-    succeeded,
+    aborted,
+    finished,
     notFound,
     inProgress,
     unsupported

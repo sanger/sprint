@@ -5,7 +5,7 @@ public class BarcodeField {
     private String value;
     private int x, y;
     private int height;
-    private int cellWidth;
+    private float cellWidth;
     private Rotation rotation = Rotation.north;
 
     public BarcodeType getBarcodeType() {
@@ -48,11 +48,11 @@ public class BarcodeField {
         this.height = height;
     }
 
-    public int getCellWidth() {
+    public float getCellWidth() {
         return cellWidth;
     }
 
-    public void setCellWidth(int cellWidth) {
+    public void setCellWidth(float cellWidth) {
         this.cellWidth = cellWidth;
     }
 

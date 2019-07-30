@@ -27,22 +27,14 @@ enum Rotation {
     west
 }
 
-enum PrintStatus {
-    failed
-    succeeded
-    notFound
-    inProgress
-    unsupported
-}
-
 enum StatusProtocol {
     soap
 }
 
 # Required Types
 type Query {
-    printers: [Printer!]!
-    printStatus(id: String!, printer: String!): PrintStatus!
+    printers(labelType: String): [Printer!]!
+    printStatus(id: String!, printer: String!): Boolean!
 }
 
 # Mutations
@@ -58,17 +50,22 @@ type Printer {
     protocol: Protocol!
     statusProtocol: StatusProtocol
     language: PrinterLanguage!
-    status: String
+    labelType: LabelType!
 }
 
 type PrintResult {
     id: String!
 }
 
+type LabelType {
+    name: String!
+    width: Int!
+    height: Int!
+    displacement: Int!
+}
+
 
 input PrintRequest {
-    labelWidth: Int!
-    labelHeight: Int!
     layouts: [Layout!]!
 }
 
@@ -81,7 +78,7 @@ input Layout {
 input BarcodeField {
     x: Int!
     y: Int!
-    cellWidth: Int!
+    cellWidth: Float!
     labelHeight: Int
     rotation: Rotation
     barcodeType: BarcodeType!

@@ -7,14 +7,17 @@ public class Printer {
     private PrinterLanguage language;
     private Protocol protocol;
     private StatusProtocol statusProtocol;
+    private LabelType labelType;
 
     public Printer() {}
 
-    public Printer(String name, PrinterLanguage language, Protocol protocol, StatusProtocol statusProtocol) {
+    public Printer(String name, PrinterLanguage language, Protocol protocol, StatusProtocol statusProtocol,
+                   LabelType labelType) {
         this.name = name;
         this.language = language;
         this.protocol = protocol;
         this.statusProtocol = statusProtocol;
+        this.labelType = labelType;
     }
 
     public String getName() {
@@ -49,6 +52,14 @@ public class Printer {
         this.statusProtocol = statusProtocol;
     }
 
+    public LabelType getLabelType() {
+        return labelType;
+    }
+
+    public void setLabelType(LabelType labelType) {
+        this.labelType = labelType;
+    }
+
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
@@ -56,6 +67,7 @@ public class Printer {
                 .add("language", language)
                 .add("protocol", protocol)
                 .add("statusProtocol", statusProtocol)
+                .add("labelType", labelType.getName())
                 .toString();
     }
 }

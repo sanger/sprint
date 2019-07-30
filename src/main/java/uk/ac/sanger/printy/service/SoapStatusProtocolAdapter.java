@@ -1,7 +1,6 @@
 package uk.ac.sanger.printy.service;
 
 import cab.*;
-import uk.ac.sanger.printy.model.PrintStatus;
 import uk.ac.sanger.printy.model.Printer;
 
 public class SoapStatusProtocolAdapter implements StatusProtocolAdapter {
@@ -12,7 +11,7 @@ public class SoapStatusProtocolAdapter implements StatusProtocolAdapter {
     }
 
     @Override
-    public PrintStatus getStatus(String jobId) {
+    public boolean getStatus(String jobId) {
         CabPrinterWebService service =  new CabPrinterWebService();
         CabPrinterSOAP printerWebServiceSOAP = service.getPrinterWebServiceSOAP();
         ListOfJobsResponse response;
@@ -20,17 +19,22 @@ public class SoapStatusProtocolAdapter implements StatusProtocolAdapter {
             response = printerWebServiceSOAP.getlistOfJobs(new ListOfJobsRequest());
         } catch (FaultResponse faultResponse) {
             faultResponse.printStackTrace();
-            return null; // TODO
+            return false;
         }
-        Job job = response.getJob().stream().filter(j -> jobId.equals(j.getId()))
-                .findAny().orElse(null);
-        if (job==null) {
-            return PrintStatus.notFound;
+
+        return jobFinished(response, jobId);
+    }
+
+    private boolean jobFinished(ListOfJobsResponse response, String jobId) {
+        boolean anyFound = false;
+        for (Job job : response.getJob()) {
+            if (job.getId().equals(jobId)) {
+                anyFound = true;
+                if (!job.getStatus().equalsIgnoreCase("finished")) {
+                    return false;
+                }
+            }
         }
-        switch (job.getStatus().toLowerCase()) {
-            case "finished": return PrintStatus.succeeded;
-            // TODO
-        }
-        return PrintStatus.notFound; // TODO
+        return anyFound;
     }
 }
