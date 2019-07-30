@@ -2,11 +2,11 @@ package uk.ac.sanger.printy;
 
 import cab.CabPrinterSOAP;
 import cab.CabPrinterWebService;
-import cab.PrintFormat;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import graphql.schema.DataFetcher;
 import org.springframework.stereotype.Component;
 import uk.ac.sanger.printy.model.*;
+import uk.ac.sanger.printy.service.Credentials;
 import uk.ac.sanger.printy.service.PrintService;
 import uk.ac.sanger.printy.service.StatusProtocolAdapter;
 import uk.ac.sanger.printy.service.StatusProtocolAdapterFactory;
@@ -20,10 +20,12 @@ public class GraphQLDataFetchers {
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     private static final Map<String, LabelType> LABEL_TYPES = Collections.singletonMap("tiny", new LabelType(30, 12, 15, "tiny"));
+    private static final Map<String, PrinterType> PRINTER_TYPES = Collections.singletonMap("squix",
+            new PrinterType("squix", PrinterLanguage.JSCRIPT, Protocol.FTP, StatusProtocol.SOAP,
+            new Credentials("ftpprint", "print")));
 
-    private static final List<Printer> PRINTERS = Arrays.asList(
-            new Printer("cgaptestbc", PrinterLanguage.jscript, Protocol.ftp, StatusProtocol.soap, LABEL_TYPES.get("tiny")),
-            new Printer("d304bc", PrinterLanguage.tec, Protocol.lpd, null, LABEL_TYPES.get("tiny"))
+    private static final List<Printer> PRINTERS = Collections.singletonList(
+            new Printer("cgaptestbc", PRINTER_TYPES.get("squix"), LABEL_TYPES.get("tiny"))
     );
 
     public DataFetcher getPrinters() {
@@ -41,7 +43,7 @@ public class GraphQLDataFetchers {
     public DataFetcher getPrinterStatus() {
         return dataFetchingEnvironment -> {
             Printer printer = dataFetchingEnvironment.getSource();
-            if (printer.getStatusProtocol()==null) {
+            if (printer.getPrinterType().getStatusProtocol()==null) {
                 return null;
             }
             CabPrinterSOAP printerWebServiceSOAP = new CabPrinterWebService().getPrinterWebServiceSOAP();
@@ -55,7 +57,7 @@ public class GraphQLDataFetchers {
             PrintRequest req = OBJECT_MAPPER.convertValue(map, PrintRequest.class);
             String printerName = dataFetchingEnvironment.getArgument("printer");
             Printer printer = PRINTERS.stream()
-                    .filter(p -> p.getName().equals(printerName))
+                    .filter(p -> p.getHostname().equals(printerName))
                     .findAny()
                     .orElseThrow(() -> new IllegalArgumentException("No such printer"));
             PrintService printService = new PrintService();
@@ -65,16 +67,18 @@ public class GraphQLDataFetchers {
         };
     }
 
-    public DataFetcher getPrintStatus() {
+    public DataFetcher isJobComplete() {
         return dataFetchingEnvironment -> {
-            String id = dataFetchingEnvironment.getArgument("id");
-            String printerArg = dataFetchingEnvironment.getArgument("printer");
+            String joinedId = dataFetchingEnvironment.getArgument("id");
+            int colon = joinedId.lastIndexOf(":");
+            String printerName = joinedId.substring(0, colon);
+            String jobId = joinedId.substring(colon+1);
 
-            Printer printer = PRINTERS.stream().filter(p -> p.getName().equals(printerArg))
-                    .findAny().orElseGet(null);
+            Printer printer = PRINTERS.stream().filter(p -> p.getHostname().equals(printerName))
+                    .findAny().orElseThrow(() -> new IllegalArgumentException("No such printer"));
 
             StatusProtocolAdapter statusProtocolAdapter = StatusProtocolAdapterFactory.getStatusProtocolAdapter(printer);
-            return statusProtocolAdapter.getStatus(id);
+            return statusProtocolAdapter.isJobComplete(jobId);
         };
     }
 }

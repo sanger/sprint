@@ -21,6 +21,6 @@ public class PrintService {
         PrintProtocolAdapter protocolAdapter = PrintProtocolAdapterFactory.getPrintProtocolAdapter(printer);
         protocolAdapter.print(printCode);
 
-        return jobId;
+        return printer.getHostname()+":"+jobId;
     }
 }

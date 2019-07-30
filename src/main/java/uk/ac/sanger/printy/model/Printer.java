@@ -3,53 +3,32 @@ package uk.ac.sanger.printy.model;
 import com.google.common.base.MoreObjects;
 
 public class Printer {
-    private String name;
-    private PrinterLanguage language;
-    private Protocol protocol;
-    private StatusProtocol statusProtocol;
+    private String hostname;
     private LabelType labelType;
+    private PrinterType printerType;
 
     public Printer() {}
 
-    public Printer(String name, PrinterLanguage language, Protocol protocol, StatusProtocol statusProtocol,
-                   LabelType labelType) {
-        this.name = name;
-        this.language = language;
-        this.protocol = protocol;
-        this.statusProtocol = statusProtocol;
+    public Printer(String hostname, PrinterType printerType, LabelType labelType) {
+        this.hostname = hostname;
+        this.printerType = printerType;
         this.labelType = labelType;
     }
 
-    public String getName() {
-        return name;
+    public String getHostname() {
+        return hostname;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setHostname(String hostname) {
+        this.hostname = hostname;
     }
 
-    public PrinterLanguage getLanguage() {
-        return language;
+    public PrinterType getPrinterType() {
+        return printerType;
     }
 
-    public void setLanguage(PrinterLanguage language) {
-        this.language = language;
-    }
-
-    public Protocol getProtocol() {
-        return protocol;
-    }
-
-    public void setProtocol(Protocol protocol) {
-        this.protocol = protocol;
-    }
-
-    public StatusProtocol getStatusProtocol() {
-        return statusProtocol;
-    }
-
-    public void setStatusProtocol(StatusProtocol statusProtocol) {
-        this.statusProtocol = statusProtocol;
+    public void setPrinterType(PrinterType printerType) {
+        this.printerType = printerType;
     }
 
     public LabelType getLabelType() {
@@ -63,11 +42,9 @@ public class Printer {
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
-                .add("name", name)
-                .add("language", language)
-                .add("protocol", protocol)
-                .add("statusProtocol", statusProtocol)
-                .add("labelType", labelType.getName())
+                .add("hostname", hostname)
+                .add("labelType", labelType)
+                .add("printerType", printerType)
                 .toString();
     }
 }

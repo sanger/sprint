@@ -11,7 +11,7 @@ public class SoapStatusProtocolAdapter implements StatusProtocolAdapter {
     }
 
     @Override
-    public boolean getStatus(String jobId) {
+    public boolean isJobComplete(String jobId) {
         CabPrinterWebService service =  new CabPrinterWebService();
         CabPrinterSOAP printerWebServiceSOAP = service.getPrinterWebServiceSOAP();
         ListOfJobsResponse response;

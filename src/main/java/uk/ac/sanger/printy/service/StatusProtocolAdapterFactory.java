@@ -5,7 +5,7 @@ import uk.ac.sanger.printy.model.StatusProtocol;
 
 public class StatusProtocolAdapterFactory {
     public static StatusProtocolAdapter getStatusProtocolAdapter(Printer printer) {
-        if (printer.getStatusProtocol()==StatusProtocol.soap) {
+        if (printer.getPrinterType().getStatusProtocol()==StatusProtocol.SOAP) {
             return new SoapStatusProtocolAdapter(printer);
         }
         throw new UnsupportedOperationException("getStatusProtocolAdapter");

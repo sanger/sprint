@@ -15,7 +15,7 @@ public class FtpPrintProtocolAdapter implements PrintProtocolAdapter {
 
     @Override
     public void print(String printCode) throws IOException {
-        FTPStore ftpStore = new FTPStore(printer.getName(), "ftpprint", "print");
+        FTPStore ftpStore = new FTPStore(printer.getHostname(), "ftpprint", "print");
         if (!ftpStore.put(printCode, "printjob.txt")) {
             throw new IOException("Print failed");
         }

@@ -50,7 +50,7 @@ public class GraphQLProvider {
         return RuntimeWiring.newRuntimeWiring()
                 .type(newTypeWiring("Query")
                         .dataFetcher("printers", graphQLDataFetchers.getPrinters())
-                        .dataFetcher("printStatus", graphQLDataFetchers.getPrintStatus()))
+                        .dataFetcher("jobComplete", graphQLDataFetchers.isJobComplete()))
                 .type(newTypeWiring("Mutation")
                         .dataFetcher("print", graphQLDataFetchers.print()))
                 .type(newTypeWiring("Printer")

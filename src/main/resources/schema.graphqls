@@ -10,16 +10,6 @@ enum Font {
     proportional
 }
 
-enum PrinterLanguage {
-    jscript
-    tec
-}
-
-enum Protocol {
-    lpd
-    ftp
-}
-
 enum Rotation {
     north
     east
@@ -27,14 +17,10 @@ enum Rotation {
     west
 }
 
-enum StatusProtocol {
-    soap
-}
-
 # Required Types
 type Query {
     printers(labelType: String): [Printer!]!
-    printStatus(id: String!, printer: String!): Boolean!
+    jobComplete(id: String!): Boolean!
 }
 
 # Mutations
@@ -46,10 +32,7 @@ type Mutation {
 
 # Types
 type Printer {
-    name: String!
-    protocol: Protocol!
-    statusProtocol: StatusProtocol
-    language: PrinterLanguage!
+    hostname: String!
     labelType: LabelType!
 }
 

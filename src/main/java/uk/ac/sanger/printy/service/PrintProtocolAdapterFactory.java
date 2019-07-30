@@ -5,9 +5,9 @@ import uk.ac.sanger.printy.model.Printer;
 public class PrintProtocolAdapterFactory {
 
     public static PrintProtocolAdapter getPrintProtocolAdapter(Printer printer) {
-        switch (printer.getProtocol()) {
-            case lpd: return new LpdPrintProtocolAdapter(printer);
-            case ftp: return new FtpPrintProtocolAdapter(printer);
+        switch (printer.getPrinterType().getProtocol()) {
+            case LDP: return new LpdPrintProtocolAdapter(printer);
+            case FTP: return new FtpPrintProtocolAdapter(printer);
         }
         throw new UnsupportedOperationException();
     }
