@@ -3,7 +3,7 @@ jdk: openjdk8
 script: mvn package
 deploy:
   provider: releases
-  api_key: $GITHUB OAUTH TOKEN
+  api_key: $GITHUB_OAUTH_TOKEN
   file: "target/printy-0.0.1-SNAPSHOT.jar"
   skip_cleanup: true
   on:
