@@ -6,10 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import graphql.schema.DataFetcher;
 import org.springframework.stereotype.Component;
 import uk.ac.sanger.printy.model.*;
-import uk.ac.sanger.printy.service.Credentials;
-import uk.ac.sanger.printy.service.PrintService;
-import uk.ac.sanger.printy.service.StatusProtocolAdapter;
-import uk.ac.sanger.printy.service.StatusProtocolAdapterFactory;
+import uk.ac.sanger.printy.service.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -77,8 +74,8 @@ public class GraphQLDataFetchers {
             Printer printer = PRINTERS.stream().filter(p -> p.getHostname().equals(printerName))
                     .findAny().orElseThrow(() -> new IllegalArgumentException("No such printer"));
 
-            StatusProtocolAdapter statusProtocolAdapter = StatusProtocolAdapterFactory.getStatusProtocolAdapter(printer);
-            return statusProtocolAdapter.isJobComplete(jobId);
+            PrintService printService = new PrintService();
+            return printService.isJobComplete(printer, jobId);
         };
     }
 }

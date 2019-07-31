@@ -28,8 +28,6 @@ type Mutation {
     print(printRequest: PrintRequest!, printer: String!): PrintResult
 }
 
-# label: PrintRequest!, printer: String!
-
 # Types
 type Printer {
     hostname: String!

@@ -3,6 +3,9 @@ package uk.ac.sanger.printy.service;
 import cab.*;
 import uk.ac.sanger.printy.model.Printer;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 public class SoapStatusProtocolAdapter implements StatusProtocolAdapter {
     private Printer printer;
 
@@ -12,7 +15,16 @@ public class SoapStatusProtocolAdapter implements StatusProtocolAdapter {
 
     @Override
     public boolean isJobComplete(String jobId) {
-        CabPrinterWebService service =  new CabPrinterWebService();
+        URL wsdlUrl;
+
+        try {
+            wsdlUrl = new URL(String.format("http://%s.internal.sanger.ac.uk/cgi-bin/soap/services.wsdl",
+                    printer.getHostname()));
+        } catch (MalformedURLException e) {
+            return false;
+        }
+
+        CabPrinterWebService service = new CabPrinterWebService(wsdlUrl);
         CabPrinterSOAP printerWebServiceSOAP = service.getPrinterWebServiceSOAP();
         ListOfJobsResponse response;
         try {

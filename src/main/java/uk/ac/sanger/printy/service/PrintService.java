@@ -23,4 +23,9 @@ public class PrintService {
 
         return printer.getHostname()+":"+jobId;
     }
+
+    public Boolean isJobComplete(Printer printer, String jobId) {
+        StatusProtocolAdapter statusProtocolAdapter = StatusProtocolAdapterFactory.getStatusProtocolAdapter(printer);
+        return statusProtocolAdapter.isJobComplete(jobId);
+    }
 }
