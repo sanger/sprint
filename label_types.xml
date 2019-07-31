@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<label_types>
+    <label_type>
+        <displacement>15</displacement>
+        <height>12</height>
+        <name>tiny</name>
+        <width>30</width>
+    </label_type>
+</label_types>

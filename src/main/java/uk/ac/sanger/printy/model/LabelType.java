@@ -1,5 +1,7 @@
 package uk.ac.sanger.printy.model;
 
+import com.google.common.base.MoreObjects;
+
 public class LabelType {
     private int width, height, displacement;
     private String name;
@@ -43,5 +45,15 @@ public class LabelType {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("width", width)
+                .add("height", height)
+                .add("displacement", displacement)
+                .add("name", name)
+                .toString();
     }
 }

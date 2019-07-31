@@ -5,10 +5,12 @@ import cab.CabPrinterWebService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import graphql.schema.DataFetcher;
 import org.springframework.stereotype.Component;
+import uk.ac.sanger.printy.config.PrinterConfig;
 import uk.ac.sanger.printy.model.*;
 import uk.ac.sanger.printy.service.*;
 
-import java.util.*;
+import java.nio.file.Paths;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
@@ -16,14 +18,7 @@ public class GraphQLDataFetchers {
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
-    private static final Map<String, LabelType> LABEL_TYPES = Collections.singletonMap("tiny", new LabelType(30, 12, 15, "tiny"));
-    private static final Map<String, PrinterType> PRINTER_TYPES = Collections.singletonMap("squix",
-            new PrinterType("squix", PrinterLanguage.JSCRIPT, Protocol.FTP, StatusProtocol.SOAP,
-            new Credentials("ftpprint", "print")));
-
-    private static final List<Printer> PRINTERS = Collections.singletonList(
-            new Printer("cgaptestbc", PRINTER_TYPES.get("squix"), LABEL_TYPES.get("tiny"))
-    );
+    private static final Map<String, Printer> PRINTERS = PrinterConfig.loadPrinters(Paths.get("."));
 
     public DataFetcher getPrinters() {
         return dataFetchingEnvironment -> {
@@ -31,7 +26,7 @@ public class GraphQLDataFetchers {
             if (labelTypeName==null) {
                 return PRINTERS;
             }
-            return PRINTERS.stream()
+            return PRINTERS.values().stream()
                     .filter(p -> p.getLabelType().getName().equals(labelTypeName))
                     .collect(Collectors.toList());
         };
@@ -48,15 +43,20 @@ public class GraphQLDataFetchers {
         };
     }
 
+    private Printer getPrinter(String hostname) {
+        Printer printer = PRINTERS.get(hostname);
+        if (printer==null) {
+            throw new IllegalArgumentException("No such printer");
+        }
+        return printer;
+    }
+
     public DataFetcher print() {
         return dataFetchingEnvironment -> {
             Map<String, String> map = dataFetchingEnvironment.getArgument("printRequest");
             PrintRequest req = OBJECT_MAPPER.convertValue(map, PrintRequest.class);
             String printerName = dataFetchingEnvironment.getArgument("printer");
-            Printer printer = PRINTERS.stream()
-                    .filter(p -> p.getHostname().equals(printerName))
-                    .findAny()
-                    .orElseThrow(() -> new IllegalArgumentException("No such printer"));
+            Printer printer = getPrinter(printerName);
             PrintService printService = new PrintService();
             String jobId = printService.print(req, printer);
 
@@ -71,8 +71,7 @@ public class GraphQLDataFetchers {
             String printerName = joinedId.substring(0, colon);
             String jobId = joinedId.substring(colon+1);
 
-            Printer printer = PRINTERS.stream().filter(p -> p.getHostname().equals(printerName))
-                    .findAny().orElseThrow(() -> new IllegalArgumentException("No such printer"));
+            Printer printer = getPrinter(printerName);
 
             PrintService printService = new PrintService();
             return printService.isJobComplete(printer, jobId);

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<printer_types>
+    <printer_type>
+        <credentials>
+            <password>print</password>
+            <username>ftpprint</username>
+        </credentials>
+        <language>JSCRIPT</language>
+        <name>squix</name>
+        <protocol>FTP</protocol>
+        <statusProtocol>SOAP</statusProtocol>
+    </printer_type>
+</printer_types>
