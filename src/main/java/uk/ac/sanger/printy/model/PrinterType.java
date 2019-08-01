@@ -1,7 +1,6 @@
 package uk.ac.sanger.printy.model;
 
 import com.google.common.base.MoreObjects;
-import uk.ac.sanger.printy.service.Credentials;
 
 public class PrinterType {
     private String name;

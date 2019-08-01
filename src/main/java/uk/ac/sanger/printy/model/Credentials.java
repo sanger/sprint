@@ -1,4 +1,4 @@
-package uk.ac.sanger.printy.service;
+package uk.ac.sanger.printy.model;
 
 public class Credentials {
     private String username;
