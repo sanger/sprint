@@ -10,6 +10,7 @@ import uk.ac.sanger.printy.model.*;
 import uk.ac.sanger.printy.service.*;
 
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -24,7 +25,7 @@ public class GraphQLDataFetchers {
         return dataFetchingEnvironment -> {
             String labelTypeName = dataFetchingEnvironment.getArgument("labelType");
             if (labelTypeName==null) {
-                return PRINTERS;
+                return new ArrayList<>(PRINTERS.values());
             }
             return PRINTERS.values().stream()
                     .filter(p -> p.getLabelType().getName().equals(labelTypeName))
