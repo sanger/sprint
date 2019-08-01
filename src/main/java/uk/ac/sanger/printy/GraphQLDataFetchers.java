@@ -4,14 +4,14 @@ import cab.CabPrinterSOAP;
 import cab.CabPrinterWebService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import graphql.schema.DataFetcher;
+import org.springframework.boot.ApplicationArguments;
 import org.springframework.stereotype.Component;
 import uk.ac.sanger.printy.config.ConfigLoader;
 import uk.ac.sanger.printy.model.*;
 import uk.ac.sanger.printy.service.PrintService;
 
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.requireNonNull;
@@ -23,11 +23,15 @@ public class GraphQLDataFetchers {
 
     private final Map<String, Printer> printers;
 
-    public GraphQLDataFetchers(ConfigLoader configLoader, ObjectMapper objectMapper, PrintService printService) {
+    public GraphQLDataFetchers(ConfigLoader configLoader, ObjectMapper objectMapper, PrintService printService,
+                               ApplicationArguments arguments) {
         requireNonNull(configLoader, "configLoader is null");
         this.objectMapper = requireNonNull(objectMapper, "objectMapper is null");
         this.printService = requireNonNull(printService, "printService is null");
-        this.printers = configLoader.getPrinters(Paths.get("printers.xml"));
+        requireNonNull(arguments, "applicationArguments is null");
+        List<String> configArgs = arguments.getOptionValues("config");
+        String configArg = (configArgs==null || configArgs.isEmpty() ? "printers.xml" : configArgs.get(0));
+        this.printers = configLoader.getPrinters(Paths.get(configArg));
     }
 
     public DataFetcher getPrinters() {
