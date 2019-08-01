@@ -1,8 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<printers>
+<config>
     <printer>
         <hostname>cgaptestbc</hostname>
         <labelType>tiny</labelType>
         <printerType>squix</printerType>
     </printer>
-</printers>
+
+    <printer_type>
+        <credentials>
+            <password>print</password>
+            <username>ftpprint</username>
+        </credentials>
+        <language>JSCRIPT</language>
+        <name>squix</name>
+        <protocol>FTP</protocol>
+        <statusProtocol>SOAP</statusProtocol>
+    </printer_type>
+
+    <label_type>
+        <displacement>15</displacement>
+        <height>12</height>
+        <name>tiny</name>
+        <width>30</width>
+    </label_type>
+</config>

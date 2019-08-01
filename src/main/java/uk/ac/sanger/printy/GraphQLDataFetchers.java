@@ -5,29 +5,38 @@ import cab.CabPrinterWebService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import graphql.schema.DataFetcher;
 import org.springframework.stereotype.Component;
-import uk.ac.sanger.printy.config.PrinterConfig;
+import uk.ac.sanger.printy.config.ConfigLoader;
 import uk.ac.sanger.printy.model.*;
-import uk.ac.sanger.printy.service.*;
+import uk.ac.sanger.printy.service.PrintService;
 
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static java.util.Objects.requireNonNull;
+
 @Component
 public class GraphQLDataFetchers {
+    private final ObjectMapper objectMapper;
+    private final PrintService printService;
 
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    private final Map<String, Printer> printers;
 
-    private static final Map<String, Printer> PRINTERS = PrinterConfig.loadPrinters(Paths.get("."));
+    public GraphQLDataFetchers(ConfigLoader configLoader, ObjectMapper objectMapper, PrintService printService) {
+        requireNonNull(configLoader, "configLoader is null");
+        this.objectMapper = requireNonNull(objectMapper, "objectMapper is null");
+        this.printService = requireNonNull(printService, "printService is null");
+        this.printers = configLoader.getPrinters(Paths.get("printers.xml"));
+    }
 
     public DataFetcher getPrinters() {
         return dataFetchingEnvironment -> {
             String labelTypeName = dataFetchingEnvironment.getArgument("labelType");
             if (labelTypeName==null) {
-                return new ArrayList<>(PRINTERS.values());
+                return new ArrayList<>(printers.values());
             }
-            return PRINTERS.values().stream()
+            return printers.values().stream()
                     .filter(p -> p.getLabelType().getName().equals(labelTypeName))
                     .collect(Collectors.toList());
         };
@@ -45,7 +54,7 @@ public class GraphQLDataFetchers {
     }
 
     private Printer getPrinter(String hostname) {
-        Printer printer = PRINTERS.get(hostname);
+        Printer printer = printers.get(hostname);
         if (printer==null) {
             throw new IllegalArgumentException("No such printer");
         }
@@ -55,10 +64,9 @@ public class GraphQLDataFetchers {
     public DataFetcher print() {
         return dataFetchingEnvironment -> {
             Map<String, String> map = dataFetchingEnvironment.getArgument("printRequest");
-            PrintRequest req = OBJECT_MAPPER.convertValue(map, PrintRequest.class);
+            PrintRequest req = objectMapper.convertValue(map, PrintRequest.class);
             String printerName = dataFetchingEnvironment.getArgument("printer");
             Printer printer = getPrinter(printerName);
-            PrintService printService = new PrintService();
             String jobId = printService.print(req, printer);
 
             return new PrintResult(jobId);
@@ -74,7 +82,6 @@ public class GraphQLDataFetchers {
 
             Printer printer = getPrinter(printerName);
 
-            PrintService printService = new PrintService();
             return printService.isJobComplete(printer, jobId);
         };
     }
