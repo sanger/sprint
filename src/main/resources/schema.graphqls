@@ -20,7 +20,7 @@ enum Rotation {
 # Required Types
 type Query {
     printers(labelType: String): [Printer!]!
-    jobComplete(id: String!): Boolean!
+    printStatus(jobId: String!): PrintStatus!
 }
 
 # Mutations
@@ -34,8 +34,13 @@ type Printer {
     labelType: LabelType!
 }
 
+type PrintStatus {
+    numFinished: Int!
+    numAborted: Int!
+}
+
 type PrintResult {
-    id: String!
+    jobId: String
 }
 
 type LabelType {
@@ -60,7 +65,7 @@ input BarcodeField {
     x: Int!
     y: Int!
     cellWidth: Float!
-    labelHeight: Int
+    height: Int
     rotation: Rotation
     barcodeType: BarcodeType!
     value: String!

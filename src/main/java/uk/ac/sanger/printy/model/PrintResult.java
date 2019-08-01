@@ -1,28 +1,24 @@
 package uk.ac.sanger.printy.model;
 
-import com.google.common.base.MoreObjects;
-
 public class PrintResult {
-    private String id;
+    private String jobId;
 
     public PrintResult() {}
 
-    public PrintResult(String id) {
-        this.id = id;
+    public PrintResult(String jobId) {
+        this.jobId = jobId;
     }
 
-    public String getId() {
-        return id;
+    public String getJobId() {
+        return jobId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setJobId(String jobId) {
+        this.jobId = jobId;
     }
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this)
-                .add("id", id)
-                .toString();
+        return String.format("PrintResult{jobId=%s}", jobId);
     }
 }

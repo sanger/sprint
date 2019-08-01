@@ -1,9 +1,10 @@
 package uk.ac.sanger.printy.service;
 
 import cab.*;
+import uk.ac.sanger.printy.model.PrintStatus;
 import uk.ac.sanger.printy.model.Printer;
 
-import java.net.MalformedURLException;
+import java.io.IOException;
 import java.net.URL;
 
 public class SoapStatusProtocolAdapter implements StatusProtocolAdapter {
@@ -14,39 +15,35 @@ public class SoapStatusProtocolAdapter implements StatusProtocolAdapter {
     }
 
     @Override
-    public boolean isJobComplete(String jobId) {
-        URL wsdlUrl;
-
-        try {
-            wsdlUrl = new URL(String.format("http://%s.internal.sanger.ac.uk/cgi-bin/soap/services.wsdl",
+    public PrintStatus getPrintStatus(String jobId) throws IOException {
+        URL wsdlUrl = new URL(String.format("http://%s.internal.sanger.ac.uk/cgi-bin/soap/services.wsdl",
                     printer.getHostname()));
-        } catch (MalformedURLException e) {
-            return false;
-        }
-
         CabPrinterWebService service = new CabPrinterWebService(wsdlUrl);
         CabPrinterSOAP printerWebServiceSOAP = service.getPrinterWebServiceSOAP();
         ListOfJobsResponse response;
         try {
             response = printerWebServiceSOAP.getlistOfJobs(new ListOfJobsRequest());
-        } catch (FaultResponse faultResponse) {
-            faultResponse.printStackTrace();
-            return false;
+        } catch (FaultResponse e) {
+            throw new IOException("Fault getting jobs from SOAP", e);
         }
-
-        return jobFinished(response, jobId);
+        return printStatus(response, jobId);
     }
 
-    private boolean jobFinished(ListOfJobsResponse response, String jobId) {
-        boolean anyFound = false;
+    private PrintStatus printStatus(ListOfJobsResponse response, String jobId) {
+        int numFinished = 0;
+        int numAborted = 0;
         for (Job job : response.getJob()) {
             if (job.getId().equals(jobId)) {
-                anyFound = true;
-                if (!job.getStatus().equalsIgnoreCase("finished")) {
-                    return false;
+                switch (job.getStatus().toLowerCase()) {
+                    case "finished":
+                        ++numFinished;
+                        break;
+                    case "aborted":
+                        ++numAborted;
+                        break;
                 }
             }
         }
-        return anyFound;
+        return new PrintStatus(numFinished, numAborted);
     }
 }

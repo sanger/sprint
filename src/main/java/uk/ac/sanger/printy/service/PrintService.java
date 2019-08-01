@@ -1,7 +1,6 @@
 package uk.ac.sanger.printy.service;
 
-import uk.ac.sanger.printy.model.PrintRequest;
-import uk.ac.sanger.printy.model.Printer;
+import uk.ac.sanger.printy.model.*;
 
 import java.io.IOException;
 
@@ -14,5 +13,5 @@ public interface PrintService {
      */
     String print(PrintRequest request, Printer printer) throws IOException;
 
-    boolean isJobComplete(Printer printer, String jobId);
+    PrintStatus getPrintStatus(Printer printer, String jobId) throws IOException;
 }

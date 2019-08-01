@@ -85,16 +85,14 @@ public class GraphQLDataFetchers {
         };
     }
 
-    public DataFetcher isJobComplete() {
+    public DataFetcher getPrintStatus() {
         return dataFetchingEnvironment -> {
-            String joinedId = dataFetchingEnvironment.getArgument("id");
+            String joinedId = dataFetchingEnvironment.getArgument("jobId");
             int colon = joinedId.lastIndexOf(":");
             String printerName = joinedId.substring(0, colon);
             String jobId = joinedId.substring(colon+1);
-
             Printer printer = getPrinter(printerName);
-
-            return printService.isJobComplete(printer, jobId);
+            return printService.getPrintStatus(printer, jobId);
         };
     }
 }

@@ -14,4 +14,5 @@ public class LpdPrintProtocolAdapter implements PrintProtocolAdapter {
     public void print(String printCode) {
         // todo
     }
+
 }

@@ -1,5 +1,6 @@
 package uk.ac.sanger.printy.service;
 
+import uk.ac.sanger.printy.model.Credentials;
 import uk.ac.sanger.printy.model.Printer;
 
 import java.io.IOException;
@@ -15,9 +16,14 @@ public class FtpPrintProtocolAdapter implements PrintProtocolAdapter {
 
     @Override
     public void print(String printCode) throws IOException {
-        FTPStore ftpStore = new FTPStore(printer.getHostname(), "ftpprint", "print");
+        Credentials credentials = printer.getPrinterType().getCredentials();
+        if (credentials==null) {
+            throw new IllegalArgumentException("No credentials supplied for FTP print");
+        }
+        FTPStore ftpStore = new FTPStore(printer.getHostname(), credentials.getUsername(), credentials.getPassword());
         if (!ftpStore.put(printCode, "printjob.txt")) {
             throw new IOException("Print failed");
         }
     }
+
 }

@@ -1,5 +1,9 @@
 package uk.ac.sanger.printy.service;
 
+import uk.ac.sanger.printy.model.PrintStatus;
+
+import java.io.IOException;
+
 public interface StatusProtocolAdapter {
-    boolean isJobComplete(String jobId);
+    PrintStatus getPrintStatus(String jobId) throws IOException;
 }
