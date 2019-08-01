@@ -10,6 +10,7 @@ import uk.ac.sanger.printy.config.ConfigLoader;
 import uk.ac.sanger.printy.model.*;
 import uk.ac.sanger.printy.service.PrintService;
 
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -30,8 +31,15 @@ public class GraphQLDataFetchers {
         this.printService = requireNonNull(printService, "printService is null");
         requireNonNull(arguments, "applicationArguments is null");
         List<String> configArgs = arguments.getOptionValues("config");
-        String configArg = (configArgs==null || configArgs.isEmpty() ? "printers.xml" : configArgs.get(0));
-        this.printers = configLoader.getPrinters(Paths.get(configArg));
+        List<Path> configPaths;
+        if (configArgs==null || configArgs.isEmpty()) {
+            configPaths = Collections.singletonList(Paths.get("printers.xml"));
+        } else {
+            configPaths = configArgs.stream()
+                    .map(Paths::get)
+                    .collect(Collectors.toList());
+        }
+        this.printers = configLoader.getPrinters(configPaths);
     }
 
     public DataFetcher getPrinters() {
