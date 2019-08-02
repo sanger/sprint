@@ -2,14 +2,12 @@ package uk.ac.sanger.printy.service.protocol;
 
 import org.apache.commons.net.ftp.FTPClient;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 public class FTPStore {
     private String server, username, password;
-    private int timeout = 5*60*1000;
+    private int timeout = 10*1000; // 10 s
 
     public FTPStore(String server, String username, String password) {
         this.server = server;

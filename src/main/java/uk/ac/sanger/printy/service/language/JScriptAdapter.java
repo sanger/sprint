@@ -9,10 +9,14 @@ import java.util.List;
  * Adapter for creating JScript for a print request.
  */
 public class JScriptAdapter implements PrinterLanguageAdapter {
-    private Printer printer;
+    private LabelType labelType;
 
     public JScriptAdapter(Printer printer) {
-        this.printer = printer;
+        this(printer.getLabelType());
+    }
+
+    public JScriptAdapter(LabelType labelType) {
+        this.labelType = labelType;
     }
 
     @Override
@@ -24,7 +28,6 @@ public class JScriptAdapter implements PrinterLanguageAdapter {
         String PRINT = "A 1";
         String SET_OPTIONS = "O R";
         String setId = "j "+jobId;
-        LabelType labelType = printer.getLabelType();
         String setSize = String.format("S l1;0,0,%s,%s,%s",
                 labelType.getHeight(), labelType.getDisplacement(), labelType.getWidth());
 
@@ -42,7 +45,7 @@ public class JScriptAdapter implements PrinterLanguageAdapter {
         return String.join("\n", lines);
     }
 
-    private void addFields(List<String> lines, Layout layout) {
+    void addFields(List<String> lines, Layout layout) {
         for (BarcodeField bf : layout.getBarcodeFields()) {
             lines.add(barcode(bf));
         }
@@ -51,7 +54,7 @@ public class JScriptAdapter implements PrinterLanguageAdapter {
         }
     }
 
-    private String barcode(BarcodeField bf) {
+    String barcode(BarcodeField bf) {
         switch (bf.getBarcodeType()) {
             case ean13: return ean13(bf);
             case code128: return code128(bf);
@@ -61,38 +64,38 @@ public class JScriptAdapter implements PrinterLanguageAdapter {
         throw new UnsupportedOperationException("Cannot translate barcode type "+bf.getBarcodeType());
     }
 
-    private String code128(BarcodeField bf) {
+    String code128(BarcodeField bf) {
         return String.format("B %s,%s,%s,CODE128,%s,%.2f;%s",
                 bf.getX(), bf.getY(), rotationAngle(bf.getRotation()), bf.getHeight(), bf.getCellWidth(),
                 bf.getValue());
     }
 
-    private String ean13(BarcodeField bf) {
+    String ean13(BarcodeField bf) {
         return String.format("B %s,%s,%s,EAN13,%s,%.2f;%s",
                 bf.getX(), bf.getY(), rotationAngle(bf.getRotation()),
                 bf.getHeight(), bf.getCellWidth(), bf.getValue());
     }
 
-    private String dataMatrix(BarcodeField bf) {
+    String dataMatrix(BarcodeField bf) {
         return String.format("B %s,%s,%s,DATAMATRIX,%.2f;%s",
                 bf.getX(), bf.getY(), rotationAngle(bf.getRotation()),
                 bf.getCellWidth(), bf.getValue());
     }
 
-    private String code39(BarcodeField bf) {
+    String code39(BarcodeField bf) {
         final int RATIO = 3;
         return String.format("B %s,%s,%s,CODE39,%s,%.2f,%s;%s",
                 bf.getX(), bf.getY(), rotationAngle(bf.getRotation()),
                 bf.getHeight(), bf.getCellWidth(), RATIO, bf.getValue());
     }
 
-    private String text(TextField tf) {
+    String text(TextField tf) {
         return String.format("T %s,%s,%s,%s,%.1f;%s",
                 tf.getX(), tf.getY(), rotationAngle(tf.getRotation()), fontCode(tf.getFont()), tf.getFontSize(),
                 tf.getValue());
     }
 
-    private String rotationAngle(Rotation rotation) {
+    String rotationAngle(Rotation rotation) {
         switch (rotation) {
             case north: return "0";
             case west: return "90";
@@ -102,7 +105,7 @@ public class JScriptAdapter implements PrinterLanguageAdapter {
         throw new UnsupportedOperationException();
     }
 
-    private String fontCode(Font font) {
+    String fontCode(Font font) {
         return (font==Font.mono ? "596" : "3");
     }
 }

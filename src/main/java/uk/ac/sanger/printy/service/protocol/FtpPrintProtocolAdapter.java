@@ -11,9 +11,11 @@ import java.io.IOException;
 public class FtpPrintProtocolAdapter implements PrintProtocolAdapter {
 
     private Printer printer;
+    private FTPStoreFactory ftpStoreFactory;
 
-    public FtpPrintProtocolAdapter(Printer printer) {
+    public FtpPrintProtocolAdapter(Printer printer, FTPStoreFactory ftpStoreFactory) {
         this.printer = printer;
+        this.ftpStoreFactory = ftpStoreFactory;
     }
 
     @Override
@@ -22,7 +24,7 @@ public class FtpPrintProtocolAdapter implements PrintProtocolAdapter {
         if (credentials==null) {
             throw new IllegalArgumentException("No credentials supplied for FTP print");
         }
-        FTPStore ftpStore = new FTPStore(printer.getHostname(), credentials.getUsername(), credentials.getPassword());
+        FTPStore ftpStore = ftpStoreFactory.getFTPStore(printer.getHostname(), credentials);
         if (!ftpStore.put(printCode, "printjob.txt")) {
             throw new IOException("Print failed");
         }
