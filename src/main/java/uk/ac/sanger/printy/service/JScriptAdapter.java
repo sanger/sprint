@@ -59,25 +59,29 @@ public class JScriptAdapter implements PrinterLanguageAdapter {
     }
 
     private String code128(BarcodeField bf) {
-        return ""; // TODO
+        return String.format("B %s,%s,%s,CODE128,%s,%.2f;%s",
+                bf.getX(), bf.getY(), rotationAngle(bf.getRotation()), bf.getHeight(), bf.getCellWidth(),
+                bf.getValue());
     }
 
     private String ean13(BarcodeField bf) {
-        return ""; // TODO
+        return String.format("B %s,%s,%s,EAN13,%s,%.2f;%s",
+                bf.getX(), bf.getY(), rotationAngle(bf.getRotation()),
+                bf.getHeight(), bf.getCellWidth(), bf.getValue());
     }
 
     private String rotationAngle(Rotation rotation) {
         switch (rotation) {
             case north: return "0";
-            case east: return "90";
+            case west: return "90";
             case south: return "180";
-            case west: return "270";
+            case east: return "270";
         }
         throw new UnsupportedOperationException();
     }
 
     private String dataMatrix(BarcodeField bf) {
-        return String.format("B %s,%s,%s,DATAMATRIX,%.1f;%s",
+        return String.format("B %s,%s,%s,DATAMATRIX,%.2f;%s",
                 bf.getX(), bf.getY(), rotationAngle(bf.getRotation()),
                 bf.getCellWidth(), bf.getValue());
     }
