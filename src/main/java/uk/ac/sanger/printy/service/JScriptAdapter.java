@@ -84,8 +84,8 @@ public class JScriptAdapter implements PrinterLanguageAdapter {
     }
 
     private String text(TextField tf) {
-        return String.format("T %s,%s,%s,%s,%s;%s",
-                tf.getX(), tf.getY(), rotationAngle(tf.getRotation()), fontCode(tf.getFont()), fontSize(tf.getFontSize()),
+        return String.format("T %s,%s,%s,%s,%.1f;%s",
+                tf.getX(), tf.getY(), rotationAngle(tf.getRotation()), fontCode(tf.getFont()), tf.getFontSize(),
                 tf.getValue());
     }
 
@@ -101,9 +101,5 @@ public class JScriptAdapter implements PrinterLanguageAdapter {
 
     private String fontCode(Font font) {
         return (font==Font.mono ? "596" : "3");
-    }
-
-    private String fontSize(int size) {
-        return "pt"+size;
     }
 }

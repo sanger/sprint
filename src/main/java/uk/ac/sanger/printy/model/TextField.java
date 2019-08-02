@@ -5,7 +5,7 @@ public class TextField {
     private Rotation rotation = Rotation.north;
     private String value;
     private Font font;
-    private int fontSize;
+    private float fontSize;
 
     public int getX() {
         return x;
@@ -47,11 +47,11 @@ public class TextField {
         this.font = font;
     }
 
-    public int getFontSize() {
+    public float getFontSize() {
         return fontSize;
     }
 
-    public void setFontSize(int fontSize) {
+    public void setFontSize(float fontSize) {
         this.fontSize = fontSize;
     }
 }

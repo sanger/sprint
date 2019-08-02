@@ -1,4 +1,4 @@
-# Enums
+# The type of barcode
 enum BarcodeType {
     ean13
     code128
@@ -6,77 +6,118 @@ enum BarcodeType {
     code39
 }
 
+# The type of font
 enum Font {
+    # A monospaced font
     mono
+    # A proportional font
     proportional
 }
 
+# The rotation of this field
 enum Rotation {
+    # Unrotated
     north
+    # Rotated clockwise by 90 degrees
     east
+    # Rotated by 180 degrees
     south
+    # Rotated anticlockwise by 90 degrees
     west
 }
 
 # Required Types
 type Query {
+    # Get the list of printers, optionally filtered by label type
     printers(labelType: String): [Printer!]!
+    # Get the status of a print job
     printStatus(jobId: String!): PrintStatus!
 }
 
 # Mutations
 type Mutation {
+    # Print some labels
     print(printRequest: PrintRequest!, printer: String!): PrintResult
 }
 
-# Types
+# A particular printer
 type Printer {
+    # The hostname of the printer
     hostname: String!
+    # The type of labels loaded into the printer
     labelType: LabelType!
 }
 
+# The status of a print job
 type PrintStatus {
+    # The number of labels finished in this print job
     numFinished: Int!
+    # The number of labels aborted in this print job
     numAborted: Int!
 }
 
+# The information returned from a print request
 type PrintResult {
+    # The id (if given) that can be used to check the status of a print job
     jobId: String
 }
 
+# A particular size of label
 type LabelType {
+    # The name of this label type
     name: String!
+    # The width of this label type in mm
     width: Int!
+    # The height of this label type in mm
     height: Int!
+    # The distance in mm between the top of each label and the top of the next
     displacement: Int!
 }
 
-
+# A sequence of layouts, each representing one label
 input PrintRequest {
+    # The layouts for labels in this print request
     layouts: [Layout!]!
 }
 
+# The contents (barcodes and text) of a single label
 input Layout {
+    # The barcodes on the label
     barcodeFields: [BarcodeField!]
+    # The text fields on the label
     textFields: [TextField!]
 }
 
-# Input Types
+# A field representing a barcode
 input BarcodeField {
+    # The distance in mm of the left edge of this barcode from the left edge of the label
     x: Int!
+    # The distance in mm of the top of this barcode from the top of the label
     y: Int!
-    cellWidth: Float!
-    height: Int
+    # The rotation of the barcode
     rotation: Rotation
+    # The width in mm of a line or pixel (depending on barcode type)
+    cellWidth: Float!
+    # The height in mm of the barcode (not relevant for 2D barcodes)
+    height: Int
+    # The type of barcode
     barcodeType: BarcodeType!
+    # The value represented by the barcode
     value: String!
 }
 
+# A field representing some text
 input TextField {
+    # The distance in mm of the left edge of this text from the left edge of the label
     x: Int!
+    # The distance in mm of the baseline of this text from the top of the label
     y: Int!
+    # The rotation of the text
     rotation: Rotation
+    # The font type to use
     font: Font!
-    fontSize: Int!
+    # The font size in mm
+    fontSize: Float!
+    # The value of this text
     value: String!
 }
