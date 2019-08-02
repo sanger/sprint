@@ -4,10 +4,12 @@ import org.apache.commons.net.ftp.FTPClient;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.function.Supplier;
 
 public class FTPStore {
     private String server, username, password;
     private int timeout = 10*1000; // 10 s
+    private Supplier<FTPClient> ftpClientSupplier = FTPClient::new;
 
     public FTPStore(String server, String username, String password) {
         this.server = server;
@@ -23,12 +25,16 @@ public class FTPStore {
         this.timeout = timeout;
     }
 
+    public void setFtpClientSupplier(Supplier<FTPClient> ftpClientSupplier) {
+        this.ftpClientSupplier = ftpClientSupplier;
+    }
+
     private InputStream makeInputStream(String content) {
         return new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8));
     }
 
     public boolean put(String content, String filename) throws IOException {
-        FTPClient ftp = new FTPClient();
+        FTPClient ftp = ftpClientSupplier.get();
         try {
             ftp.setConnectTimeout(timeout);
             ftp.setDataTimeout(timeout);
