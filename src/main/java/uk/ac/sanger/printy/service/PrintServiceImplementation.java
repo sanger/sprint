@@ -2,6 +2,12 @@ package uk.ac.sanger.printy.service;
 
 import org.springframework.stereotype.Component;
 import uk.ac.sanger.printy.model.*;
+import uk.ac.sanger.printy.service.language.PrinterLanguageAdapter;
+import uk.ac.sanger.printy.service.language.PrinterLanguageAdapterFactory;
+import uk.ac.sanger.printy.service.protocol.PrintProtocolAdapter;
+import uk.ac.sanger.printy.service.protocol.PrintProtocolAdapterFactory;
+import uk.ac.sanger.printy.service.status.StatusProtocolAdapter;
+import uk.ac.sanger.printy.service.status.StatusProtocolAdapterFactory;
 
 import java.io.IOException;
 import java.util.UUID;

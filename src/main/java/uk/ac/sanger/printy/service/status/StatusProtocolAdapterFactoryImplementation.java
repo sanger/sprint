@@ -1,4 +1,4 @@
-package uk.ac.sanger.printy.service;
+package uk.ac.sanger.printy.service.status;
 
 import org.springframework.stereotype.Component;
 import uk.ac.sanger.printy.model.Printer;

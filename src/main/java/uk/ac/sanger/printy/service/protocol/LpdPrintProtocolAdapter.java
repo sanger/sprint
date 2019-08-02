@@ -1,4 +1,4 @@
-package uk.ac.sanger.printy.service;
+package uk.ac.sanger.printy.service.protocol;
 
 import uk.ac.sanger.printy.model.Printer;
 
