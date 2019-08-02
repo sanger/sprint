@@ -1,7 +1,10 @@
 package uk.ac.sanger.printy.config;
 
 /**
- * Class representing the normalised printer info stored in config
+ * Class representing the unnested printer info stored in config.
+ * The printer class itself contains references to a LabelType and a PrinterType.
+ * This is the deserialisable version that instead contains the names
+ * of a label type and a printer type, which are resolved when the config is processed.
  * @author dr6
  */
 class PrinterEntry {

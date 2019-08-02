@@ -8,9 +8,10 @@ import uk.ac.sanger.printy.model.StatusProtocol;
 public class StatusProtocolAdapterFactoryImplementation implements StatusProtocolAdapterFactory {
     @Override
     public StatusProtocolAdapter getStatusProtocolAdapter(Printer printer) {
-        if (printer.getPrinterType().getStatusProtocol()==StatusProtocol.SOAP) {
+        StatusProtocol statusProtocol = printer.getPrinterType().getStatusProtocol();
+        if (statusProtocol ==StatusProtocol.SOAP) {
             return new SoapStatusProtocolAdapter(printer);
         }
-        throw new UnsupportedOperationException("getStatusProtocolAdapter");
+        throw new UnsupportedOperationException("Unsupported status protocol: "+statusProtocol);
     }
 }

@@ -5,7 +5,9 @@ import uk.ac.sanger.printy.model.Printer;
 
 import java.io.IOException;
 
-
+/**
+ * An adapter for sending a print request to a particular printer over FTP.
+ */
 public class FtpPrintProtocolAdapter implements PrintProtocolAdapter {
 
     private Printer printer;

@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * A class representing the config as read from a config file,
+ * which is a collection of label types, printer types,
+ * and printer entries.
  * @author dr6
  */
 @XmlRootElement(name="config")

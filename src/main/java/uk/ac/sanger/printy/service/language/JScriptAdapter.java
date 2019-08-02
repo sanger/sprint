@@ -5,6 +5,9 @@ import uk.ac.sanger.printy.model.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Adapter for creating JScript for a print request.
+ */
 public class JScriptAdapter implements PrinterLanguageAdapter {
     private Printer printer;
 

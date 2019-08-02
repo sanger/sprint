@@ -7,6 +7,9 @@ import uk.ac.sanger.printy.model.Printer;
 import java.io.IOException;
 import java.net.URL;
 
+/**
+ * An adapter for checking print status over SOAP (for CAB printers).
+ */
 public class SoapStatusProtocolAdapter implements StatusProtocolAdapter {
     private Printer printer;
 
