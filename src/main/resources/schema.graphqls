@@ -3,6 +3,7 @@ enum BarcodeType {
     ean13
     code128
     datamatrix
+    code39
 }
 
 enum Font {

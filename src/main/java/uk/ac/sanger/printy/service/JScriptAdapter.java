@@ -41,21 +41,21 @@ public class JScriptAdapter implements PrinterLanguageAdapter {
 
     private void addFields(List<String> lines, Layout layout) {
         for (BarcodeField bf : layout.getBarcodeFields()) {
-            switch (bf.getBarcodeType()) {
-                case ean13:
-                    lines.add(ean13(bf));
-                    break;
-                case code128:
-                    lines.add(code128(bf));
-                    break;
-                case datamatrix:
-                    lines.add(dataMatrix(bf));
-                    break;
-            }
+            lines.add(barcode(bf));
         }
         for (TextField tf : layout.getTextFields()) {
             lines.add(text(tf));
         }
+    }
+
+    private String barcode(BarcodeField bf) {
+        switch (bf.getBarcodeType()) {
+            case ean13: return ean13(bf);
+            case code128: return code128(bf);
+            case datamatrix: return dataMatrix(bf);
+            case code39: return code39(bf);
+        }
+        throw new UnsupportedOperationException("Cannot translate barcode type "+bf.getBarcodeType());
     }
 
     private String code128(BarcodeField bf) {
@@ -70,6 +70,25 @@ public class JScriptAdapter implements PrinterLanguageAdapter {
                 bf.getHeight(), bf.getCellWidth(), bf.getValue());
     }
 
+    private String dataMatrix(BarcodeField bf) {
+        return String.format("B %s,%s,%s,DATAMATRIX,%.2f;%s",
+                bf.getX(), bf.getY(), rotationAngle(bf.getRotation()),
+                bf.getCellWidth(), bf.getValue());
+    }
+
+    private String code39(BarcodeField bf) {
+        final int RATIO = 3;
+        return String.format("B %s,%s,%s,CODE39,%s,%.2f,%s;%s",
+                bf.getX(), bf.getY(), rotationAngle(bf.getRotation()),
+                bf.getHeight(), bf.getCellWidth(), RATIO, bf.getValue());
+    }
+
+    private String text(TextField tf) {
+        return String.format("T %s,%s,%s,%s,%s;%s",
+                tf.getX(), tf.getY(), rotationAngle(tf.getRotation()), fontCode(tf.getFont()), fontSize(tf.getFontSize()),
+                tf.getValue());
+    }
+
     private String rotationAngle(Rotation rotation) {
         switch (rotation) {
             case north: return "0";
@@ -80,12 +99,6 @@ public class JScriptAdapter implements PrinterLanguageAdapter {
         throw new UnsupportedOperationException();
     }
 
-    private String dataMatrix(BarcodeField bf) {
-        return String.format("B %s,%s,%s,DATAMATRIX,%.2f;%s",
-                bf.getX(), bf.getY(), rotationAngle(bf.getRotation()),
-                bf.getCellWidth(), bf.getValue());
-    }
-
     private String fontCode(Font font) {
         return (font==Font.mono ? "596" : "3");
     }
@@ -93,12 +106,4 @@ public class JScriptAdapter implements PrinterLanguageAdapter {
     private String fontSize(int size) {
         return "pt"+size;
     }
-
-    private String text(TextField tf) {
-        return String.format("T %s,%s,%s,%s,%s;%s",
-                tf.getX(), tf.getY(), rotationAngle(tf.getRotation()), fontCode(tf.getFont()), fontSize(tf.getFontSize()),
-                tf.getValue());
-    }
-
-
 }
