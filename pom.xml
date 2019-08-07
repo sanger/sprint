@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>uk.ac.sanger</groupId>
-    <artifactId>printy</artifactId>
+    <artifactId>sprint</artifactId>
     <version>0.0.3</version>
-    <name>printy</name>
-    <description>Demo project for Spring Boot</description>
+    <name>SPrint</name>
+    <description>Simple print service</description>
 
     <properties>
         <java.version>1.8</java.version>
