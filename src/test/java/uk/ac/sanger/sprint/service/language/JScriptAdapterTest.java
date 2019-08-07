@@ -111,13 +111,14 @@ public class JScriptAdapterTest {
 
         List<Layout> layouts = Arrays.asList(new Layout(), new Layout());
         layouts.get(0).setTextFields(textFields.subList(0,2));
+        layouts.get(0).setLabelSize(new LabelSize(80, 50, 60));
         layouts.get(1).setBarcodeFields(barcodeFields);
         layouts.get(1).setTextFields(textFields.subList(2,3));
 
         PrintRequest request = new PrintRequest(layouts);
         String jobId = "MyJob";
         String code = adapter.transcribe(request, jobId);
-        assertEquals(code, "m m\nJ\nS l1;0,0,12,16,30\nO R\nH 100\nj MyJob\n" +
+        assertEquals(code, "m m\nJ\nS l1;0,0,50,60,80\nO R\nH 100\nj MyJob\n" +
                 "T 0,10,0,596,7.0;ALPHA\nT 10,20,0,3,7.0;BETA\nA 1\n" +
                 "J\nS l1;0,0,12,16,30\nO R\nH 100\nj MyJob\n" +
                 "B 10,20,0,EAN13,6,0.30;VALUE\nB 10,20,0,DATAMATRIX,0.30;VALUE\n" +

@@ -1,12 +1,9 @@
 package uk.ac.sanger.sprint.model;
 
-public class BarcodeField {
+public class BarcodeField extends Field {
     private BarcodeType barcodeType;
-    private String value;
-    private int x, y;
     private int height;
     private float cellWidth;
-    private Rotation rotation = Rotation.north;
 
     public BarcodeType getBarcodeType() {
         return barcodeType;
@@ -14,30 +11,6 @@ public class BarcodeField {
 
     public void setBarcodeType(BarcodeType barcodeType) {
         this.barcodeType = barcodeType;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
     }
 
     public int getHeight() {
@@ -54,13 +27,5 @@ public class BarcodeField {
 
     public void setCellWidth(float cellWidth) {
         this.cellWidth = cellWidth;
-    }
-
-    public Rotation getRotation() {
-        return rotation;
-    }
-
-    public void setRotation(Rotation rotation) {
-        this.rotation = rotation;
     }
 }

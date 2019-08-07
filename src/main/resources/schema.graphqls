@@ -86,6 +86,18 @@ input Layout {
     barcodeFields: [BarcodeField!]
     # The text fields on the label
     textFields: [TextField!]
+    # Optionally override the label size for this label
+    labelSize: LabelSize
+}
+
+# An explicit stating of the size of a label
+input LabelSize {
+    # The width of this label in mm
+    width: Int!
+    # The height of this label in mm
+    height: Int!
+    # The distance in mm between the top of each label and the top of the next
+    displacement: Int!
 }
 
 # A field representing a barcode

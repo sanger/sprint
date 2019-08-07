@@ -28,13 +28,20 @@ public class JScriptAdapter implements PrinterLanguageAdapter {
         String PRINT = "A 1";
         String SET_OPTIONS = "O R";
         String setId = "j "+jobId;
-        String setSize = String.format("S l1;0,0,%s,%s,%s",
-                labelType.getHeight(), labelType.getDisplacement(), labelType.getWidth());
+        String defaultLabelSize = null;
 
         lines.add(SET_MEASUREMENT);
         for (Layout layout : request.getLayouts()) {
             lines.add(JOB_START);
-            lines.add(setSize);
+            LabelSize labelSize = layout.getLabelSize();
+            if (labelSize!=null) {
+                lines.add(setLabelSize(labelSize));
+            } else {
+                if (defaultLabelSize==null) {
+                    defaultLabelSize = setLabelSize(labelType);
+                }
+                lines.add(defaultLabelSize);
+            }
             lines.add(SET_OPTIONS);
             lines.add(SET_HEAT);
             lines.add(setId);
@@ -43,6 +50,11 @@ public class JScriptAdapter implements PrinterLanguageAdapter {
         }
         lines.add("");
         return String.join("\n", lines);
+    }
+
+    String setLabelSize(LabelSize labelSize) {
+        return String.format("S l1;0,0,%s,%s,%s",
+                labelSize.getHeight(), labelSize.getDisplacement(), labelSize.getWidth());
     }
 
     void addFields(List<String> lines, Layout layout) {
