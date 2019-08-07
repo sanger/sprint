@@ -4,7 +4,7 @@ public class TextField {
     private int x,y;
     private Rotation rotation = Rotation.north;
     private String value;
-    private Font font;
+    private Font font = Font.proportional;
     private float fontSize;
 
     public int getX() {

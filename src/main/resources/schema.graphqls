@@ -114,8 +114,8 @@ input TextField {
     y: Int!
     # The rotation of the text
     rotation: Rotation
-    # The font type to use
-    font: Font!
+    # The font type to use. If a font is not specified, it will default to proportional
+    font: Font
     # The font size in mm
     fontSize: Float!
     # The value of this text
