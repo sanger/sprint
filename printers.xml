@@ -2,7 +2,7 @@
 <config>
     <printer>
         <hostname>cgaptestbc</hostname>
-        <labelType>tiny</labelType>
+        <labelType>thin</labelType>
         <printerType>squix</printerType>
     </printer>
 
@@ -22,5 +22,11 @@
         <height>12</height>
         <name>tiny</name>
         <width>30</width>
+    </label_type>
+    <label_type>
+        <displacement>11</displacement>
+        <height>8</height>
+        <width>90</width>
+        <name>thin</name>
     </label_type>
 </config>
