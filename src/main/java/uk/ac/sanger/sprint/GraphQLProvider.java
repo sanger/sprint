@@ -4,7 +4,10 @@ import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 import graphql.GraphQL;
 import graphql.schema.GraphQLSchema;
-import graphql.schema.idl.*;
+import graphql.schema.idl.RuntimeWiring;
+import graphql.schema.idl.SchemaGenerator;
+import graphql.schema.idl.SchemaParser;
+import graphql.schema.idl.TypeDefinitionRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
@@ -20,8 +23,13 @@ public class GraphQLProvider {
 
     private GraphQL graphQL;
 
+    final GraphQLDataFetchers graphQLDataFetchers;
+
     @Autowired
-    GraphQLDataFetchers graphQLDataFetchers;
+    public GraphQLProvider(GraphQLDataFetchers graphQLDataFetchers) {
+        this.graphQLDataFetchers = graphQLDataFetchers;
+    }
+
 
     @Bean
     public GraphQL graphQL() {
@@ -47,12 +55,11 @@ public class GraphQLProvider {
         return RuntimeWiring.newRuntimeWiring()
                 .type(newTypeWiring("Query")
                         .dataFetcher("printers", graphQLDataFetchers.getPrinters())
+                        .dataFetcher("printerTypes", graphQLDataFetchers.getPrinterTypes())
                         .dataFetcher("printStatus", graphQLDataFetchers.getPrintStatus())
                         .dataFetcher("labelTypes", graphQLDataFetchers.getLabelTypes()))
                 .type(newTypeWiring("Mutation")
                         .dataFetcher("print", graphQLDataFetchers.print()))
-                .type(newTypeWiring("Printer")
-                        .dataFetcher("status", graphQLDataFetchers.getPrinterStatus()))
                 .build();
     }
 }

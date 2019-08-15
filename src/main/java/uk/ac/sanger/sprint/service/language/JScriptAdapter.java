@@ -38,6 +38,9 @@ public class JScriptAdapter implements PrinterLanguageAdapter {
                 lines.add(setLabelSize(labelSize));
             } else {
                 if (defaultLabelSize==null) {
+                    if (labelType==null) {
+                        throw new IllegalArgumentException("Requests to unknown printers must include label size in layouts.");
+                    }
                     defaultLabelSize = setLabelSize(labelType);
                 }
                 lines.add(defaultLabelSize);

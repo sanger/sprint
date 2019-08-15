@@ -1,11 +1,16 @@
 package uk.ac.sanger.sprint.config;
 
 import org.springframework.stereotype.Component;
-import uk.ac.sanger.sprint.model.*;
+import uk.ac.sanger.sprint.model.LabelType;
+import uk.ac.sanger.sprint.model.Printer;
+import uk.ac.sanger.sprint.model.PrinterType;
 
 import javax.xml.bind.JAXBException;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -39,8 +44,9 @@ class ConfigLoaderImplementation implements ConfigLoader {
 
         for (Printer printer: printers.values()) {
             printer.getLabelType().getPrinters().add(printer);
+            printer.getPrinterType().getPrinters().add(printer);
         }
 
-        return new Config(printers, new ArrayList<>(labelTypes.values()));
+        return new Config(printers, new ArrayList<>(labelTypes.values()), printerTypes);
     }
 }

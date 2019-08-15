@@ -30,6 +30,8 @@ enum Rotation {
 type Query {
     # Get the list of printers, optionally filtered by label type
     printers(labelType: String): [Printer!]!
+    # Get the list of printer types
+    printerTypes: [PrinterType!]!
     # Get the status of a print job
     printStatus(jobId: String!): PrintStatus!
     # Get the list of label types
@@ -38,8 +40,16 @@ type Query {
 
 # Mutations
 type Mutation {
-    # Print some labels
-    print(printRequest: PrintRequest!, printer: String!): PrintResult
+    # Print some labels.
+    # If the printer is not in config, the printerType must be specified
+    print(printRequest: PrintRequest!, printer: String!, printerType: String): PrintResult
+}
+
+type PrinterType {
+    # The name of the printer type
+    name: String!
+    # The list of printers of this type
+    printers: [Printer!]!
 }
 
 # A particular printer
@@ -48,6 +58,8 @@ type Printer {
     hostname: String!
     # The type of labels loaded into the printer
     labelType: LabelType!
+    # The type of printer
+    printerType: PrinterType!
 }
 
 # The status of a print job
@@ -90,7 +102,8 @@ input Layout {
     barcodeFields: [BarcodeField!]
     # The text fields on the label
     textFields: [TextField!]
-    # Optionally override the label size for this label
+    # Optionally override the label size for this label. This is compulsory if the printer you are printing to
+    # is not in config.
     labelSize: LabelSize
 }
 

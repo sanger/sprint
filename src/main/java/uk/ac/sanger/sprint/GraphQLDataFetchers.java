@@ -1,19 +1,23 @@
 package uk.ac.sanger.sprint;
 
-import cab.CabPrinterSOAP;
-import cab.CabPrinterWebService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import graphql.schema.DataFetcher;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.stereotype.Component;
 import uk.ac.sanger.sprint.config.Config;
 import uk.ac.sanger.sprint.config.ConfigLoader;
-import uk.ac.sanger.sprint.model.*;
+import uk.ac.sanger.sprint.model.PrintRequest;
+import uk.ac.sanger.sprint.model.PrintResult;
+import uk.ac.sanger.sprint.model.Printer;
+import uk.ac.sanger.sprint.model.PrinterType;
 import uk.ac.sanger.sprint.service.PrintService;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.requireNonNull;
@@ -55,17 +59,6 @@ public class GraphQLDataFetchers {
         };
     }
 
-    public DataFetcher getPrinterStatus() {
-        return dataFetchingEnvironment -> {
-            Printer printer = dataFetchingEnvironment.getSource();
-            if (printer.getPrinterType().getStatusProtocol()==null) {
-                return null;
-            }
-            CabPrinterSOAP printerWebServiceSOAP = new CabPrinterWebService().getPrinterWebServiceSOAP();
-            return printerWebServiceSOAP.getPrinterStatus("");
-        };
-    }
-
     private Printer getPrinter(String hostname) {
         Printer printer = config.getPrinters().get(hostname);
         if (printer==null) {
@@ -79,7 +72,27 @@ public class GraphQLDataFetchers {
             Map<String, String> map = dataFetchingEnvironment.getArgument("printRequest");
             PrintRequest req = objectMapper.convertValue(map, PrintRequest.class);
             String printerName = dataFetchingEnvironment.getArgument("printer");
-            Printer printer = getPrinter(printerName);
+            String printerTypeName = dataFetchingEnvironment.getArgument("printerType");
+
+
+            PrinterType printerType = null;
+            if (printerTypeName!=null) {
+                printerType = config.getPrinterTypes().get(printerTypeName);
+                if (printerType==null) {
+                    throw new IllegalArgumentException("Unknown printer type: "+printerTypeName);
+                }
+            }
+
+            Printer printer = config.getPrinters().get(printerName);
+            if (printer==null && printerType==null) {
+                throw new IllegalArgumentException("Unknown printer without explicit printer type: "+printerName);
+            }
+            if (printer==null) {
+                printer = new Printer(printerName, printerType, null);
+            } else if (printerType!=null) {
+                printer = new Printer(printer.getHostname(), printerType, printer.getLabelType());
+            }
+
             String jobId = printService.print(req, printer);
 
             return new PrintResult(jobId);
@@ -99,5 +112,9 @@ public class GraphQLDataFetchers {
 
     public DataFetcher getLabelTypes() {
         return dataFetchingEnvironment -> config.getLabelTypes();
+    }
+
+    public DataFetcher getPrinterTypes() {
+        return dataFetchingEnvironment -> config.getPrinterTypes().values();
     }
 }

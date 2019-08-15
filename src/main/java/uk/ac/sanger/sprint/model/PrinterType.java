@@ -2,6 +2,9 @@ package uk.ac.sanger.sprint.model;
 
 import com.google.common.base.MoreObjects;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PrinterType {
     private String name;
     private PrinterLanguage language;
@@ -9,6 +12,8 @@ public class PrinterType {
     private StatusProtocol statusProtocol;
 
     private Credentials credentials;
+
+    private List<Printer> printers = new ArrayList<>();
 
     public PrinterType() {
     }
@@ -60,6 +65,14 @@ public class PrinterType {
 
     public void setCredentials(Credentials credentials) {
         this.credentials = credentials;
+    }
+
+    public List<Printer> getPrinters() {
+        return printers;
+    }
+
+    public void setPrinters(List<Printer> printers) {
+        this.printers = printers;
     }
 
     @Override
