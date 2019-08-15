@@ -2,8 +2,12 @@ package uk.ac.sanger.sprint.model;
 
 import com.google.common.base.MoreObjects;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class LabelType extends LabelSize {
     private String name;
+    private List<Printer> printers = new ArrayList<>();
 
     public LabelType() {
         super();
@@ -20,6 +24,14 @@ public class LabelType extends LabelSize {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<Printer> getPrinters() {
+        return printers;
+    }
+
+    public void setPrinters(List<Printer> printers) {
+        this.printers = printers;
     }
 
     @Override

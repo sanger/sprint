@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import graphql.schema.DataFetcher;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.stereotype.Component;
+import uk.ac.sanger.sprint.config.Config;
 import uk.ac.sanger.sprint.config.ConfigLoader;
 import uk.ac.sanger.sprint.model.*;
 import uk.ac.sanger.sprint.service.PrintService;
@@ -22,7 +23,7 @@ public class GraphQLDataFetchers {
     private final ObjectMapper objectMapper;
     private final PrintService printService;
 
-    private final Map<String, Printer> printers;
+    private final Config config;
 
     public GraphQLDataFetchers(ConfigLoader configLoader, ObjectMapper objectMapper, PrintService printService,
                                ApplicationArguments arguments) {
@@ -39,16 +40,16 @@ public class GraphQLDataFetchers {
                     .map(Paths::get)
                     .collect(Collectors.toList());
         }
-        this.printers = configLoader.getPrinters(configPaths);
+        this.config = configLoader.getPrinters(configPaths);
     }
 
     public DataFetcher getPrinters() {
         return dataFetchingEnvironment -> {
             String labelTypeName = dataFetchingEnvironment.getArgument("labelType");
             if (labelTypeName==null) {
-                return new ArrayList<>(printers.values());
+                return new ArrayList<>(config.getPrinters().values());
             }
-            return printers.values().stream()
+            return config.getPrinters().values().stream()
                     .filter(p -> p.getLabelType().getName().equals(labelTypeName))
                     .collect(Collectors.toList());
         };
@@ -66,7 +67,7 @@ public class GraphQLDataFetchers {
     }
 
     private Printer getPrinter(String hostname) {
-        Printer printer = printers.get(hostname);
+        Printer printer = config.getPrinters().get(hostname);
         if (printer==null) {
             throw new IllegalArgumentException("No such printer");
         }
@@ -94,5 +95,9 @@ public class GraphQLDataFetchers {
             Printer printer = getPrinter(printerName);
             return printService.getPrintStatus(printer, jobId);
         };
+    }
+
+    public DataFetcher getLabelTypes() {
+        return dataFetchingEnvironment -> config.getLabelTypes();
     }
 }

@@ -10,10 +10,10 @@ import java.util.*;
  */
 public interface ConfigLoader {
     /**
-     * Reads the config and returns a map of printer hostname to printer.
-     * Multiple config files can be read and aggregated into one map.
+     * Reads and returns the config for the application.
+     * Multiple config files can be read and aggregated into combined config object
      * @param paths the paths to read to get the config
-     * @return a map to all printers from their hostnames
+     * @return config including a map to all printers from their hostnames
      */
-    Map<String, Printer> getPrinters(Collection<Path> paths);
+    Config getPrinters(Collection<Path> paths);
 }

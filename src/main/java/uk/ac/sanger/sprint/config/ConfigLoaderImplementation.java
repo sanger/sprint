@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @Component
 class ConfigLoaderImplementation implements ConfigLoader {
     @Override
-    public Map<String, Printer> getPrinters(Collection<Path> paths) {
+    public Config getPrinters(Collection<Path> paths) {
         List<PrinterConfig> configs = new ArrayList<>(paths.size());
         try {
             for (Path path : paths) {
@@ -32,9 +32,15 @@ class ConfigLoaderImplementation implements ConfigLoader {
         final Map<String, PrinterType> printerTypes = configs.stream()
                 .flatMap(cf -> cf.getPrinterTypes().stream())
                 .collect(Collectors.toMap(PrinterType::getName, Function.identity()));
-        return configs.stream()
+        Map<String, Printer> printers = configs.stream()
                 .flatMap(cf -> cf.getEntries().stream())
                 .map(e -> new Printer(e.getHostname(), printerTypes.get(e.getPrinterType()), labelTypes.get(e.getLabelType())))
                 .collect(Collectors.toMap(Printer::getHostname, Function.identity()));
+
+        for (Printer printer: printers.values()) {
+            printer.getLabelType().getPrinters().add(printer);
+        }
+
+        return new Config(printers, new ArrayList<>(labelTypes.values()));
     }
 }

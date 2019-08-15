@@ -32,6 +32,8 @@ type Query {
     printers(labelType: String): [Printer!]!
     # Get the status of a print job
     printStatus(jobId: String!): PrintStatus!
+    # Get the list of label types
+    labelTypes: [LabelType!]!
 }
 
 # Mutations
@@ -72,6 +74,8 @@ type LabelType {
     height: Int!
     # The distance in mm between the top of each label and the top of the next
     displacement: Int!
+    # The printers supporting this label type
+    printers: [Printer!]!
 }
 
 # A sequence of layouts, each representing one label
