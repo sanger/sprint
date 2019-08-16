@@ -91,6 +91,17 @@ public class JScriptAdapterTest {
     }
 
     @Test
+    public void testLayoutSizes() {
+        List<Layout> layouts = Arrays.asList(new Layout(), new Layout());
+        layouts.get(0).setLabelSize(new LabelSize(30, 15, 20));
+        PrintRequest request = new PrintRequest(layouts);
+        String jobId = "MyJob";
+        String code = adapter.transcribe(request, jobId);
+        assertEquals(code, "m m\nJ\nS l1;0,0,15,20,30\nO R\nH 100\nj MyJob\nA 1\n" +
+                "J\nS l1;0,0,12,16,30\nO R\nH 100\nj MyJob\nA 1\n");
+    }
+
+    @Test
     public void testTranscribe() {
         String[] strings = { "ALPHA", "BETA", "GAMMA" };
         List<TextField> textFields = IntStream.range(0, strings.length)

@@ -2,6 +2,8 @@ package uk.ac.sanger.sprint.model;
 
 import com.google.common.base.MoreObjects;
 
+import java.util.Objects;
+
 public class Printer {
     private String hostname;
     private LabelType labelType;
@@ -46,5 +48,20 @@ public class Printer {
                 .add("labelType", labelType)
                 .add("printerType", printerType)
                 .toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Printer that = (Printer) o;
+        return (Objects.equals(this.hostname, that.hostname)
+                && Objects.equals(this.labelType, that.labelType)
+                && Objects.equals(this.printerType, that.printerType));
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(hostname);
     }
 }

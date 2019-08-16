@@ -54,7 +54,6 @@ public class FtpPrintProtocolAdapterTest {
         verify(mockFtpStore).put(eq(printCode), notNull());
     }
 
-
     @Test
     public void testPrintUnsuccessful() throws IOException {
         when(mockFtpStore.put(any(), any())).thenReturn(false);

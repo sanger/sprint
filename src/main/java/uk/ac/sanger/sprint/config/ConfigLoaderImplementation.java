@@ -1,16 +1,11 @@
 package uk.ac.sanger.sprint.config;
 
 import org.springframework.stereotype.Component;
-import uk.ac.sanger.sprint.model.LabelType;
-import uk.ac.sanger.sprint.model.Printer;
-import uk.ac.sanger.sprint.model.PrinterType;
+import uk.ac.sanger.sprint.model.*;
 
 import javax.xml.bind.JAXBException;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -20,12 +15,22 @@ import java.util.stream.Collectors;
  */
 @Component
 class ConfigLoaderImplementation implements ConfigLoader {
+    private ThrowingFunction<Path, PrinterConfig, JAXBException> printerConfigLoader;
+
+    public ConfigLoaderImplementation() {
+        this(null);
+    }
+
+    public ConfigLoaderImplementation(ThrowingFunction<Path, PrinterConfig, JAXBException> printerConfigLoader) {
+        this.printerConfigLoader = (printerConfigLoader==null ? PrinterConfig::load : printerConfigLoader);
+    }
+
     @Override
-    public Config getPrinters(Collection<Path> paths) {
+    public Config loadConfig(Collection<Path> paths) {
         List<PrinterConfig> configs = new ArrayList<>(paths.size());
         try {
             for (Path path : paths) {
-                configs.add(PrinterConfig.load(path));
+                configs.add(printerConfigLoader.apply(path));
             }
         } catch (JAXBException e) {
             throw new RuntimeException("Failed to load printer config", e);

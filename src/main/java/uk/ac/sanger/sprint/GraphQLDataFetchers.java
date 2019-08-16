@@ -6,18 +6,12 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.stereotype.Component;
 import uk.ac.sanger.sprint.config.Config;
 import uk.ac.sanger.sprint.config.ConfigLoader;
-import uk.ac.sanger.sprint.model.PrintRequest;
-import uk.ac.sanger.sprint.model.PrintResult;
-import uk.ac.sanger.sprint.model.Printer;
-import uk.ac.sanger.sprint.model.PrinterType;
+import uk.ac.sanger.sprint.model.*;
 import uk.ac.sanger.sprint.service.PrintService;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.requireNonNull;
@@ -44,7 +38,7 @@ public class GraphQLDataFetchers {
                     .map(Paths::get)
                     .collect(Collectors.toList());
         }
-        this.config = configLoader.getPrinters(configPaths);
+        this.config = configLoader.loadConfig(configPaths);
     }
 
     public DataFetcher getPrinters() {
