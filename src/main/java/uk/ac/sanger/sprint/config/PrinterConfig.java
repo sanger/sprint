@@ -46,6 +46,12 @@ class PrinterConfig {
         this.printerTypes = printerTypes;
     }
 
+    /**
+     * Loads the PrinterConfig from the specified xml file.
+     * @param path the path to the file to load
+     * @return a pojo representation of the config in the xml file
+     * @exception JAXBException a problem with unmarshalling the xml file
+     */
     public static PrinterConfig load(Path path) throws JAXBException {
         JAXBContext jc = JAXBContext.newInstance(PrinterConfig.class);
         Unmarshaller um = jc.createUnmarshaller();

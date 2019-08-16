@@ -4,6 +4,9 @@ import uk.ac.sanger.sprint.model.*;
 
 import java.io.IOException;
 
+/**
+ * A service for handling communicating with printers
+ */
 public interface PrintService {
     /**
      * Prints
