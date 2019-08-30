@@ -15,8 +15,11 @@ public class PrintProtocolAdapterFactoryImplementation implements PrintProtocolA
     @Override
     public PrintProtocolAdapter getPrintProtocolAdapter(Printer printer) {
         Protocol protocol = printer.getPrinterType().getProtocol();
-        if (protocol == Protocol.FTP) {
-            return new FtpPrintProtocolAdapter(printer, ftpStoreFactory);
+        if (protocol!=null) {
+            switch (protocol) {
+                case FTP: return new FtpPrintProtocolAdapter(printer, ftpStoreFactory);
+                case STUB: return new StubPrintProtocolAdapter();
+            }
         }
         throw new UnsupportedOperationException("Unsupported printing protocol: "+protocol);
     }

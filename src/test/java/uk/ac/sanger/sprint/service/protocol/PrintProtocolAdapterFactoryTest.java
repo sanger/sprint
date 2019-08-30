@@ -21,20 +21,29 @@ public class PrintProtocolAdapterFactoryTest {
         protocolAdapterFactory = new PrintProtocolAdapterFactoryImplementation(null);
     }
 
+    private Printer printer(Protocol protocol) {
+        PrinterType pt = new PrinterType("mypt", PrinterLanguage.JSCRIPT, protocol, null, null);
+        return new Printer("myprinter", pt, null);
+    }
+
     @Test
     public void testFtp() {
-        PrinterType pt = new PrinterType("mypt", PrinterLanguage.JSCRIPT, Protocol.FTP, null, null);
-        Printer printer = new Printer("myprinter", pt, null);
-        PrintProtocolAdapter adapter = protocolAdapterFactory.getPrintProtocolAdapter(printer);
+        PrintProtocolAdapter adapter = protocolAdapterFactory.getPrintProtocolAdapter(printer(Protocol.FTP));
         assertNotNull(adapter);
         assertTrue(adapter instanceof FtpPrintProtocolAdapter);
     }
 
     @Test
-    public void testWithNullForPrintProtocol() {
-        PrinterType pt = new PrinterType("mypt", PrinterLanguage.JSCRIPT, null, null, null);
-        Printer printer = new Printer("myprinter", pt, null);
+    public void testStub() {
+        PrintProtocolAdapter adapter = protocolAdapterFactory.getPrintProtocolAdapter(printer(Protocol.STUB));
+        assertNotNull(adapter);
+        assertTrue(adapter instanceof StubPrintProtocolAdapter);
+    }
+
+    @Test
+    public void testWithNoPrintProtocol() {
         UnsupportedOperationException uoe = null;
+        Printer printer = printer(null);
         try {
             protocolAdapterFactory.getPrintProtocolAdapter(printer);
         } catch (UnsupportedOperationException e) {

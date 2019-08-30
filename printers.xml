@@ -5,28 +5,38 @@
         <labelType>thin</labelType>
         <printerType>squix</printerType>
     </printer>
+    <printer>
+        <hostname>stub</hostname>
+        <labelType>thin</labelType>
+        <printerType>stub</printerType>
+    </printer>
 
     <printer_type>
+        <name>squix</name>
         <credentials>
             <password>print</password>
             <username>ftpprint</username>
         </credentials>
         <language>JSCRIPT</language>
-        <name>squix</name>
         <protocol>FTP</protocol>
         <statusProtocol>SOAP</statusProtocol>
     </printer_type>
+    <printer_type>
+        <name>stub</name>
+        <language>JSCRIPT</language>
+        <protocol>STUB</protocol>
+    </printer_type>
 
     <label_type>
+        <name>tiny</name>
         <displacement>15</displacement>
         <height>12</height>
-        <name>tiny</name>
         <width>30</width>
     </label_type>
     <label_type>
+        <name>thin</name>
         <displacement>11</displacement>
         <height>8</height>
         <width>90</width>
-        <name>thin</name>
     </label_type>
 </config>
