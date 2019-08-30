@@ -41,7 +41,7 @@ public class ConfigLoaderTest {
                 new Printer("p2", printerTypes.get(1), labelTypes.get(0))
         );
 
-        paths = Arrays.asList(Paths.get("."), Paths.get(".."));
+        paths = Arrays.asList(Paths.get("printers", "printers.xml"), Paths.get("boo"));
         configLoader = new ConfigLoaderImplementation(this::loadPrinterConfig);
     }
 
@@ -72,7 +72,7 @@ public class ConfigLoaderTest {
             pc.setEntries(entries(printers.subList(1,3)));
             return pc;
         }
-        throw new JAXBException("Bad config");
+        throw new JAXBException("Bad config: "+path);
     }
 
     @Test
@@ -92,12 +92,18 @@ public class ConfigLoaderTest {
     public void testLoadConfigException() {
         RuntimeException rte = null;
         try {
-            configLoader.loadConfig(Arrays.asList(paths.get(0), Paths.get("../..")));
+            configLoader.loadConfig(Arrays.asList(paths.get(0), Paths.get("beep")));
         } catch (RuntimeException e) {
             rte = e;
         }
         assertNotNull(rte);
         assertEquals(rte.getMessage(), "Failed to load printer config");
         assertTrue(rte.getCause() instanceof JAXBException);
+    }
+
+    @Test
+    public void testLoadConfigDirectory() {
+        Config config = configLoader.loadConfig(Collections.singletonList(Paths.get("printers")));
+        assertFalse(config.getPrinters().isEmpty());
     }
 }

@@ -32,7 +32,7 @@ public class GraphQLDataFetchers {
         List<String> configArgs = arguments.getOptionValues("config");
         List<Path> configPaths;
         if (configArgs==null || configArgs.isEmpty()) {
-            configPaths = Collections.singletonList(Paths.get("printers.xml"));
+            configPaths = Collections.singletonList(Paths.get("printers"));
         } else {
             configPaths = configArgs.stream()
                     .map(Paths::get)

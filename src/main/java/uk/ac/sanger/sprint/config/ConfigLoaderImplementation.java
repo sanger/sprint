@@ -4,6 +4,8 @@ import org.springframework.stereotype.Component;
 import uk.ac.sanger.sprint.model.*;
 
 import javax.xml.bind.JAXBException;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.function.Function;
@@ -30,9 +32,18 @@ class ConfigLoaderImplementation implements ConfigLoader {
         List<PrinterConfig> configs = new ArrayList<>(paths.size());
         try {
             for (Path path : paths) {
-                configs.add(printerConfigLoader.apply(path));
+                if (Files.isDirectory(path)) {
+                    Iterator<Path> pathIter = Files.list(path)
+                            .filter(subPath -> Files.isRegularFile(subPath) && hasExtension(subPath, ".xml"))
+                            .iterator();
+                    while (pathIter.hasNext()) {
+                        configs.add(printerConfigLoader.apply(pathIter.next()));
+                    }
+                } else {
+                    configs.add(printerConfigLoader.apply(path));
+                }
             }
-        } catch (JAXBException e) {
+        } catch (JAXBException|IOException e) {
             throw new RuntimeException("Failed to load printer config", e);
         }
 
@@ -53,5 +64,15 @@ class ConfigLoaderImplementation implements ConfigLoader {
         }
 
         return new Config(printers, new ArrayList<>(labelTypes.values()), printerTypes);
+    }
+
+    private static boolean hasExtension(Path path, String extension) {
+        String filename = path.getFileName().toString();
+        int xl = extension.length();
+        int fl = filename.length();
+        if (fl < xl) {
+            return false;
+        }
+        return filename.regionMatches(true, fl - xl, extension, 0, xl);
     }
 }
