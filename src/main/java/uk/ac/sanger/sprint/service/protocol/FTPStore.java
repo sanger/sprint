@@ -50,6 +50,7 @@ public class FTPStore {
                 return false;
             }
             ftp.enterLocalActiveMode();
+            log.info(externalIP);
             ftp.setActiveExternalIPAddress(externalIP);
             if (!ftp.login(username, password)) {
                 log.info("Failed to log in");
