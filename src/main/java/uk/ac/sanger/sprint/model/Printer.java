@@ -77,6 +77,10 @@ public class Printer {
         this.labelType = labelType;
     }
 
+    public String getAddress() {
+        return (hostname.indexOf('.') < 0) ? hostname + ".internal.sanger.ac.uk" : hostname;
+    }
+
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)

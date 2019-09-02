@@ -24,7 +24,7 @@ public class FtpPrintProtocolAdapter implements PrintProtocolAdapter {
         if (credentials==null) {
             throw new IllegalArgumentException("No credentials supplied for FTP print");
         }
-        FTPStore ftpStore = ftpStoreFactory.getFTPStore(printer.getHostname(), credentials);
+        FTPStore ftpStore = ftpStoreFactory.getFTPStore(printer.getAddress(), credentials);
         if (!ftpStore.put(printCode, "printjob.txt")) {
             throw new IOException("Print failed");
         }

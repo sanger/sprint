@@ -50,7 +50,7 @@ public class FtpPrintProtocolAdapterTest {
 
         String printCode = "P\nABC 123\nX\n";
         adapter.print(printCode);
-        verify(mockFtpStoreFactory).getFTPStore(printer.getHostname(), credentials);
+        verify(mockFtpStoreFactory).getFTPStore(printer.getAddress(), credentials);
         verify(mockFtpStore).put(eq(printCode), notNull());
     }
 
@@ -66,7 +66,7 @@ public class FtpPrintProtocolAdapterTest {
             exception = e;
         }
         assertNotNull(exception);
-        verify(mockFtpStoreFactory).getFTPStore(printer.getHostname(), credentials);
+        verify(mockFtpStoreFactory).getFTPStore(printer.getAddress(), credentials);
         verify(mockFtpStore).put(eq(printCode), notNull());
     }
 }

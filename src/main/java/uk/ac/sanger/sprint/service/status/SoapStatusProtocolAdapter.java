@@ -19,8 +19,8 @@ public class SoapStatusProtocolAdapter implements StatusProtocolAdapter {
 
     @Override
     public PrintStatus getPrintStatus(String jobId) throws IOException {
-        URL wsdlUrl = new URL(String.format("http://%s.internal.sanger.ac.uk/cgi-bin/soap/services.wsdl",
-                    printer.getHostname()));
+        URL wsdlUrl = new URL(String.format("http://%s/cgi-bin/soap/services.wsdl",
+                    printer.getAddress()));
         CabPrinterWebService service = new CabPrinterWebService(wsdlUrl);
         CabPrinterSOAP printerWebServiceSOAP = service.getPrinterWebServiceSOAP();
         ListOfJobsResponse response;
