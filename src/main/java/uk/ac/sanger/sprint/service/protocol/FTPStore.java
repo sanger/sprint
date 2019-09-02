@@ -43,7 +43,7 @@ public class FTPStore {
             if (!ftp.isConnected()) {
                 return false;
             }
-            ftp.enterLocalPassiveMode();
+            // ftp.enterLocalPassiveMode();
             if (!ftp.login(username, password)) {
                 return false;
             }
