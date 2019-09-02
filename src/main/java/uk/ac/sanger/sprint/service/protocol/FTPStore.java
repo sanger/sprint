@@ -1,12 +1,16 @@
 package uk.ac.sanger.sprint.service.protocol;
 
 import org.apache.commons.net.ftp.FTPClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.function.Supplier;
 
 public class FTPStore {
+    private static Logger log = LoggerFactory.getLogger(FTPStore.class);
+
     private String server, username, password;
     private int timeout = 10*1000; // 10 s
     private Supplier<FTPClient> ftpClientSupplier = FTPClient::new;
@@ -41,17 +45,21 @@ public class FTPStore {
             ftp.setDefaultTimeout(timeout);
             ftp.connect(server);
             if (!ftp.isConnected()) {
+                log.info("Failed to connect");
                 return false;
             }
             ftp.enterLocalPassiveMode();
             if (!ftp.login(username, password)) {
+                log.info("Failed to log in");
                 return false;
             }
             try (InputStream fis = makeInputStream(content)) {
                 if (!ftp.storeFile(filename, fis)) {
+                    log.info("Failed to store file");
                     return false;
                 }
             }
+            log.info("File sent");
         } finally {
             if (ftp.isConnected()) {
                 ftp.disconnect();
