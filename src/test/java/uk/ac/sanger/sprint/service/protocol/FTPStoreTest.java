@@ -54,7 +54,7 @@ public class FTPStoreTest {
         inOrder.verify(mockFtpClient).setDataTimeout(TIMEOUT);
         inOrder.verify(mockFtpClient).setDefaultTimeout(TIMEOUT);
         inOrder.verify(mockFtpClient).connect(HOST);
-        inOrder.verify(mockFtpClient).enterLocalPassiveMode();
+        inOrder.verify(mockFtpClient).enterLocalActiveMode();
         inOrder.verify(mockFtpClient).login(USER, PW);
         inOrder.verify(mockFtpClient).storeFile(eq(FILENAME), notNull());
         inOrder.verify(mockFtpClient).disconnect();
