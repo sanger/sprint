@@ -14,6 +14,7 @@ public class FTPStore {
     private String server, username, password;
     private int timeout = 10*1000; // 10 s
     private Supplier<FTPClient> ftpClientSupplier = FTPClient::new;
+    private String externalIP = System.getenv("externalIP");
 
     public FTPStore(String server, String username, String password) {
         this.server = server;
@@ -48,7 +49,8 @@ public class FTPStore {
                 log.info("Failed to connect");
                 return false;
             }
-            ftp.enterLocalPassiveMode();
+            ftp.enterLocalActiveMode();
+            ftp.setActiveExternalIPAddress(externalIP);
             if (!ftp.login(username, password)) {
                 log.info("Failed to log in");
                 return false;
