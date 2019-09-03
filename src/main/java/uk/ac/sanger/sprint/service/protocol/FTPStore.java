@@ -43,16 +43,20 @@ public class FTPStore {
             ftp.setConnectTimeout(timeout);
             ftp.setDataTimeout(timeout);
             ftp.setDefaultTimeout(timeout);
+            log.debug("connecting");
             ftp.connect(server);
             if (!ftp.isConnected()) {
                 log.info("Failed to connect");
                 return false;
             }
+            log.debug("entering passive mode");
             ftp.enterLocalPassiveMode();
+            log.debug("logging in");
             if (!ftp.login(username, password)) {
                 log.info("Failed to log in");
                 return false;
             }
+            log.debug("storing file");
             try (InputStream fis = makeInputStream(content)) {
                 if (!ftp.storeFile(filename, fis)) {
                     log.info("Failed to store file");
