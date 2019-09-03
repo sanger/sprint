@@ -11,14 +11,15 @@ import java.util.function.Supplier;
 public class FTPStore {
     private static Logger log = LoggerFactory.getLogger(FTPStore.class);
 
-    private String server, username, password;
+    private String server, username, password, ipAddress;
     private int timeout = 10*1000; // 10 s
     private Supplier<FTPClient> ftpClientSupplier = FTPClient::new;
 
-    public FTPStore(String server, String username, String password) {
+    public FTPStore(String server, String username, String password, String ipAddress) {
         this.server = server;
         this.username = username;
         this.password = password;
+        this.ipAddress = ipAddress;
     }
 
     /**
@@ -39,7 +40,6 @@ public class FTPStore {
 
     public boolean put(String content, String filename) throws IOException {
         FTPClient ftp = ftpClientSupplier.get();
-        String ipAddress = System.getenv("externalIP");
         try {
             ftp.setConnectTimeout(timeout);
             ftp.setDataTimeout(timeout);
@@ -52,8 +52,10 @@ public class FTPStore {
             }
             log.debug("entering passive mode");
             ftp.enterLocalActiveMode();
-            log.debug("setting report active external ip address {}", ipAddress);
-            ftp.setReportActiveExternalIPAddress(ipAddress);
+            if (ipAddress!=null) {
+                log.debug("setting report active external ip address {}", ipAddress);
+                ftp.setReportActiveExternalIPAddress(ipAddress);
+            }
             log.debug("logging in");
             if (!ftp.login(username, password)) {
                 log.info("Failed to log in");

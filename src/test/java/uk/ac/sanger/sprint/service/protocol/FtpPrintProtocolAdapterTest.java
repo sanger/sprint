@@ -18,6 +18,8 @@ import static org.testng.Assert.assertNotNull;
  */
 @Test
 public class FtpPrintProtocolAdapterTest {
+    private static final String IPADDRESS = "1.2.3.4";
+
     @Mock
     private FTPStore mockFtpStore;
     @Mock
@@ -40,8 +42,8 @@ public class FtpPrintProtocolAdapterTest {
     @BeforeMethod
     private void setupMocks() {
         initMocks(this);
-        when(mockFtpStoreFactory.getFTPStore(any(), any())).thenReturn(mockFtpStore);
-        adapter = new FtpPrintProtocolAdapter(printer, mockFtpStoreFactory);
+        when(mockFtpStoreFactory.getFTPStore(any(), any(), any())).thenReturn(mockFtpStore);
+        adapter = new FtpPrintProtocolAdapter(printer, mockFtpStoreFactory, IPADDRESS);
     }
 
     @Test
@@ -50,7 +52,7 @@ public class FtpPrintProtocolAdapterTest {
 
         String printCode = "P\nABC 123\nX\n";
         adapter.print(printCode);
-        verify(mockFtpStoreFactory).getFTPStore(printer.getAddress(), credentials);
+        verify(mockFtpStoreFactory).getFTPStore(printer.getAddress(), credentials, IPADDRESS);
         verify(mockFtpStore).put(eq(printCode), notNull());
     }
 
@@ -66,7 +68,7 @@ public class FtpPrintProtocolAdapterTest {
             exception = e;
         }
         assertNotNull(exception);
-        verify(mockFtpStoreFactory).getFTPStore(printer.getAddress(), credentials);
+        verify(mockFtpStoreFactory).getFTPStore(printer.getAddress(), credentials, IPADDRESS);
         verify(mockFtpStore).put(eq(printCode), notNull());
     }
 }

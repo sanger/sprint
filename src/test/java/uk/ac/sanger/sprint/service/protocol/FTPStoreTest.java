@@ -20,7 +20,7 @@ import static org.testng.Assert.*;
  */
 @Test
 public class FTPStoreTest {
-    private final String HOST = "myhost", USER = "myuser", PW = "mypw";
+    private final String HOST = "myhost", USER = "myuser", PW = "mypw", IPADDRESS = "1.2.3.4";
     private final int TIMEOUT = 1500;
     private final String FILENAME = "myfile", CONTENT = "P\nT 123;ABC\nA 1\n";
     private FTPStore ftpStore;
@@ -30,7 +30,7 @@ public class FTPStoreTest {
 
     @BeforeMethod
     private void setupMocks() {
-        ftpStore = new FTPStore(HOST, USER, PW);
+        ftpStore = new FTPStore(HOST, USER, PW, IPADDRESS);
         mockFtpClient = mock(FTPClient.class);
         ftpStore.setFtpClientSupplier(() -> mockFtpClient);
         ftpStore.setTimeout(TIMEOUT);
@@ -54,7 +54,8 @@ public class FTPStoreTest {
         inOrder.verify(mockFtpClient).setDataTimeout(TIMEOUT);
         inOrder.verify(mockFtpClient).setDefaultTimeout(TIMEOUT);
         inOrder.verify(mockFtpClient).connect(HOST);
-//        inOrder.verify(mockFtpClient).enterLocalPassiveMode();
+        inOrder.verify(mockFtpClient).enterLocalActiveMode();
+        inOrder.verify(mockFtpClient).setReportActiveExternalIPAddress(IPADDRESS);
         inOrder.verify(mockFtpClient).login(USER, PW);
         inOrder.verify(mockFtpClient).storeFile(eq(FILENAME), notNull());
         inOrder.verify(mockFtpClient).disconnect();

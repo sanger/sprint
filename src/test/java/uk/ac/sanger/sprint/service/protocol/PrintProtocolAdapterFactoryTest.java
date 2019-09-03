@@ -1,10 +1,15 @@
 package uk.ac.sanger.sprint.service.protocol;
 
-import org.testng.annotations.BeforeClass;
+import org.springframework.boot.ApplicationArguments;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import uk.ac.sanger.sprint.model.*;
 import uk.ac.sanger.sprint.service.language.PrinterLanguageAdapterFactory;
 
+import java.util.Collections;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
@@ -16,9 +21,11 @@ import static org.testng.Assert.assertTrue;
 public class PrintProtocolAdapterFactoryTest {
     private PrintProtocolAdapterFactory protocolAdapterFactory;
 
-    @BeforeClass
+    @BeforeMethod
     private void setup() {
-        protocolAdapterFactory = new PrintProtocolAdapterFactoryImplementation(null);
+        ApplicationArguments mockApplicationArguments = mock(ApplicationArguments.class);
+        when(mockApplicationArguments.getOptionValues("ipAddress")).thenReturn(Collections.singletonList("1.2.3.4"));
+        protocolAdapterFactory = new PrintProtocolAdapterFactoryImplementation(null, mockApplicationArguments);
     }
 
     private Printer printer(Protocol protocol) {

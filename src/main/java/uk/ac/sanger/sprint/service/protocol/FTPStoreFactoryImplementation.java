@@ -9,7 +9,7 @@ import uk.ac.sanger.sprint.model.Credentials;
 @Component
 public class FTPStoreFactoryImplementation implements FTPStoreFactory {
     @Override
-    public FTPStore getFTPStore(String server, Credentials credentials) {
-        return new FTPStore(server, credentials.getUsername(), credentials.getPassword());
+    public FTPStore getFTPStore(String server, Credentials credentials, String ipAddress) {
+        return new FTPStore(server, credentials.getUsername(), credentials.getPassword(), ipAddress);
     }
 }
