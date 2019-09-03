@@ -39,6 +39,7 @@ public class FTPStore {
 
     public boolean put(String content, String filename) throws IOException {
         FTPClient ftp = ftpClientSupplier.get();
+        String ipAddress = System.getenv("externalIP");
         try {
             ftp.setConnectTimeout(timeout);
             ftp.setDataTimeout(timeout);
@@ -50,7 +51,9 @@ public class FTPStore {
                 return false;
             }
             log.debug("entering passive mode");
-            ftp.enterLocalPassiveMode();
+            ftp.enterLocalActiveMode();
+            log.debug("setting report active external ip address {}", ipAddress);
+            ftp.setReportActiveExternalIPAddress(ipAddress);
             log.debug("logging in");
             if (!ftp.login(username, password)) {
                 log.info("Failed to log in");
