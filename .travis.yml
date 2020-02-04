@@ -9,7 +9,6 @@ before_install:
 install: yarn install
 
 before_script:
-  - "cd client"
   - "yarn build"
   - "cp -r build/* ../src/main/resources/static"
 
