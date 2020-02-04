@@ -5,15 +5,18 @@ node_js: "0.12"
 cache: yarn
 
 before_install:
-  - "cd client"
+  - "cd ${TRAVIS_BUILD_DIR}/client"
 
 install: yarn install
 
 before_script:
+  - "cd ${TRAVIS_BUILD_DIR}/client"
   - "yarn build"
   - "cp -r build/* ${TRAVIS_BUILD_DIR}/src/main/resources/static"
+  - "cd ${TRAVIS_BUILD_DIR}"
 
 script: mvn package
+
 deploy:
   provider: releases
   token: $GITHUB_OAUTH_TOKEN
