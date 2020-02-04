@@ -1,5 +1,18 @@
 language: java
 jdk: openjdk8
+
+node_js: "0.12"
+
+before_install:
+  - "cd client"
+
+install: yarn install
+
+before_script:
+  - "cd client"
+  - "yarn build"
+  - "cp -r build/* ../src/main/resources/static"
+
 script: mvn package
 deploy:
   provider: releases
