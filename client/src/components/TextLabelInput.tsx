@@ -1,7 +1,6 @@
 import React, { ChangeEvent } from "react";
 import { CanvasTextField } from "../types";
 import { Printers_printers_labelType } from "../queries/types/Printers";
-import { Font } from "../types/graphql-global-types";
 
 const TextLabelInput: React.FC<{
   canvasTextField: CanvasTextField;

@@ -1,5 +1,4 @@
 import React, { ChangeEvent } from "react";
-import { BarcodeType } from "../types/graphql-global-types";
 import { CanvasBarcodeField } from "../types";
 import { Printers_printers_labelType } from "../queries/types/Printers";
 
@@ -12,15 +11,6 @@ const BarcodeLabelInput: React.FC<{
   ) => void;
   labelType: Printers_printers_labelType;
 }> = ({ canvasBarcodeField, onInputChange, labelType }) => {
-  const barcodeTypes: JSX.Element[] = Object.values(BarcodeType).map(
-    barcodeType => {
-      return (
-        <option key={barcodeType} value={barcodeType}>
-          {barcodeType}
-        </option>
-      );
-    }
-  );
 
   return (
     <div className="label-input-grid mt-3">
