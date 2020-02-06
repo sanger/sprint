@@ -11,7 +11,6 @@ const BarcodeLabelInput: React.FC<{
   ) => void;
   labelType: Printers_printers_labelType;
 }> = ({ canvasBarcodeField, onInputChange, labelType }) => {
-
   return (
     <div className="label-input-grid mt-3">
       <label htmlFor="cellWidth">Width:</label>

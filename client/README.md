@@ -31,11 +31,13 @@ The page will reload if you make edits. You will also see any lint errors in the
 
 The application is written in [TypeScript](https://www.typescriptlang.org/), a typed superset of JavaScript. It will be automatically compiled to JavaScript when the server is running, with any compile errors being shown in the console.
 
+The configuration for TypeScript is in `tsconfig.json`.
+
 ### CSS
 
-The CSS is built using the [TailwindCSS](https://tailwindcss.com/) framework, which provides low-level CSS utility classes, removing the amount of CSS you have to write.
+The CSS is built using the [TailwindCSS](https://tailwindcss.com/) framework, which provides low-level CSS utility classes, removing the amount of CSS you have to write. The configuration for `tailwindcss` is in `tailwind.config.js`.
 
-Any CSS you do need to write, goes in the `src/styles/tailwind.css` file. When the server is running, this file is transformed by `tailwindcss` to `src/styles/index.css`.
+Any CSS you do need to write, goes in the `src/styles/tailwind.css` file. When the server is running, this file is transformed by `postcss` (a Webpack plugin) to `src/styles/index.css`. The configuration for `postcss` is in `postcss.config.js`.
 
 `index.css` is then imported by the application (see `src/index.tsx`).
 
