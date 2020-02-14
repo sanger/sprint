@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 /**
  * Hook to call a side effect after a given delay
@@ -29,4 +29,15 @@ export const useOnDeleteKey = (fn: () => void) => {
       }
     });
   }, [fn]);
+};
+
+/**
+ * Hook that manages when an amount of time has passed
+ * @param {number} minimumWait time in milliseconds
+ * @returns {boolean} has the minimum wait time elapsed?
+ */
+export const useMinimumWait = (minimumWait: number) => {
+  const [minimumWaitElapsed, setMinimumWaitElapsed] = useState<boolean>(false);
+  useSetTimeout(() => setMinimumWaitElapsed(true), minimumWait);
+  return minimumWaitElapsed;
 };

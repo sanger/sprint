@@ -1,13 +1,13 @@
 import React, { useCallback } from "react";
 import _ from "lodash";
-import { useLazyQuery } from "@apollo/react-hooks";
+import { useQuery } from "@apollo/react-hooks";
 
 import LabelTypeSelector from "./LabelTypeSelector";
 import ActionButtons from "./ActionButtons";
 import LabelDesigner from "./LabelDesigner";
 import FieldList from "./FieldList";
 import useLayoutReducer from "../hooks/layoutReducer";
-import { useOnDeleteKey, useSetTimeout } from "../hooks";
+import { useMinimumWait, useOnDeleteKey } from "../hooks";
 
 import labelTypesQuery from "../queries/labelTypesQuery";
 import { LabelTypes } from "../queries/types/LabelTypes";
@@ -18,62 +18,55 @@ import { Layout } from "../types/graphql-global-types";
 
 const SprintPlanning: React.FC = () => {
   const [state, dispatch] = useLayoutReducer();
-  const [loadLabelTypes, { error, called, loading }] = useLazyQuery<LabelTypes>(
-    labelTypesQuery,
-    {
-      onCompleted: data => {
-        // Set the label types available
-        dispatch({ type: "SET_LABEL_TYPES", value: data.labelTypes });
+  const minimumWaitElapsed = useMinimumWait(1200);
+  const { loading, error } = useQuery<LabelTypes>(labelTypesQuery, {
+    onCompleted: data => {
+      // Set the label types available
+      dispatch({ type: "SET_LABEL_TYPES", value: data.labelTypes });
 
-        // If there was no label type in the URL do nothing
-        if (!state?.initialQueryParams?.labelType) return;
+      // If there was no label type in the URL do nothing
+      if (!state?.initialQueryParams?.labelType) return;
 
-        // Otherwise find it...
-        let labelType = _.find(data.labelTypes, {
-          name: state.initialQueryParams.labelType
-        });
+      // Otherwise find it...
+      let labelType = _.find(data.labelTypes, {
+        name: state.initialQueryParams.labelType
+      });
 
-        if (!labelType) return;
+      if (!labelType) return;
 
-        // Set it as the current label type
-        dispatch({ type: "SET_LABEL_TYPE", labelType });
+      // Set it as the current label type
+      dispatch({ type: "SET_LABEL_TYPE", labelType });
 
-        // Build any fields from the URL too
-        state.initialQueryParams?.printRequest?.layouts?.forEach(
-          (layout: Layout) => {
-            layout?.barcodeFields?.forEach(barcodeField => {
-              dispatch({
-                type: "ADD_CANVAS_BARCODE_FIELD",
-                options: barcodeField
-              });
+      // Build any fields from the URL too
+      state.initialQueryParams?.printRequest?.layouts?.forEach(
+        (layout: Layout) => {
+          layout?.barcodeFields?.forEach(barcodeField => {
+            dispatch({
+              type: "ADD_CANVAS_BARCODE_FIELD",
+              options: barcodeField
             });
+          });
 
-            layout?.textFields?.forEach(textField => {
-              dispatch({
-                type: "ADD_CANVAS_TEXT_FIELD",
-                options: textField
-              });
+          layout?.textFields?.forEach(textField => {
+            dispatch({
+              type: "ADD_CANVAS_TEXT_FIELD",
+              options: textField
             });
-          }
-        );
-      }
+          });
+        }
+      );
     }
-  );
-  // Have a delay so the loading screen doesn't look like a blip
-  useSetTimeout(loadLabelTypes, 1200);
+  });
 
   // Delete the selected canvas field on delete/backspace (if a text field isn't active)
   const onDelete = useCallback(() => {
-    if (
-      !document.activeElement ||
-      document.activeElement.nodeName !== "INPUT"
-    ) {
+    if (document.activeElement?.nodeName !== "INPUT") {
       dispatch({ type: "DELETE_SELECTED_CANVAS_FIELD" });
     }
   }, [dispatch]);
   useOnDeleteKey(onDelete);
 
-  if (loading || !called) {
+  if (loading || !minimumWaitElapsed) {
     return (
       <div className="flex w-screen h-screen items-center justify-center">
         <Loading />
@@ -113,9 +106,11 @@ const SprintPlanning: React.FC = () => {
         </svg>
 
         <LabelTypeSelector
+          onSelect={labelType =>
+            dispatch({ type: "SET_LABEL_TYPE", labelType })
+          }
           selectedLabelType={state.labelType}
           labelTypes={state.labelTypes}
-          dispatch={dispatch}
         />
 
         <LabelDesigner state={state} dispatch={dispatch} />

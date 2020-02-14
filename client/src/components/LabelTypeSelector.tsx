@@ -1,25 +1,21 @@
-import React, { Dispatch } from "react";
+import React from "react";
 
 import { Printers_printers_labelType } from "../queries/types/Printers";
-import { Action } from "../hooks/layoutReducer/actions";
-
 import { LabelTypes_labelTypes } from "../queries/types/LabelTypes";
 
 const LabelTypeSelector: React.FC<{
+  onSelect: (labelType: LabelTypes_labelTypes) => void;
   selectedLabelType?: Printers_printers_labelType;
   labelTypes?: LabelTypes_labelTypes[];
-  dispatch: Dispatch<Action>;
-}> = ({ selectedLabelType, labelTypes = [], dispatch }) => {
+}> = ({ selectedLabelType, labelTypes = [], onSelect }) => {
   const items = labelTypes.map(labelType => {
-    const disabled = selectedLabelType?.name === labelType.name;
-
     return (
       <li key={labelType.name}>
         <button
           className="btn btn-transition w-full mt-2 capitalize"
-          disabled={disabled}
+          disabled={selectedLabelType?.name === labelType.name}
           onClick={e => {
-            dispatch({ type: "SET_LABEL_TYPE", labelType });
+            onSelect(labelType);
           }}
         >
           {labelType.name}

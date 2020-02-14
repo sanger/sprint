@@ -3,8 +3,13 @@ import { throttle } from "lodash";
 
 import { AppState } from "../hooks/layoutReducer";
 import { Action } from "../hooks/layoutReducer/actions";
-import { CanvasField, CanvasPosition, isCanvasTextField } from "../types";
+import { CanvasField, isCanvasTextField } from "../types";
 import { getBarcodeGeneratorByBarcodeType } from "../models/barcodes";
+import {
+  clearCanvas,
+  getCanvasMousePosition,
+  withCanvasRotation
+} from "../canvas";
 
 const LabelDesigner: React.FC<{
   state: AppState;
@@ -58,11 +63,11 @@ const LabelDesigner: React.FC<{
     });
 
     ctx.canvas.addEventListener("mousedown", e => {
-      dispatch({ type: "MOUSE_DOWN", value: getMousePosition(ctx, e) });
+      dispatch({ type: "MOUSE_DOWN", value: getCanvasMousePosition(ctx, e) });
     });
 
     ctx.canvas.addEventListener("dblclick", e => {
-      dispatch({ type: "DOUBLE_CLICK", value: getMousePosition(ctx, e) });
+      dispatch({ type: "DOUBLE_CLICK", value: getCanvasMousePosition(ctx, e) });
     });
 
     ctx.canvas.addEventListener(
@@ -71,7 +76,7 @@ const LabelDesigner: React.FC<{
         e => {
           dispatch({
             type: "SET_CANVAS_MOUSE_POSITION",
-            value: getMousePosition(ctx, e)
+            value: getCanvasMousePosition(ctx, e)
           });
         },
         50,
@@ -120,50 +125,30 @@ const LabelDesigner: React.FC<{
             );
           });
         }
-
-        // ...clear the canvas
       })
     )
       .then(fields => {
-        ctx.clearRect(
-          0,
-          0,
+        clearCanvas(
+          ctx,
           state.canvasDimensions.width,
           state.canvasDimensions.height
         );
-        ctx.fillStyle = "#fff";
-        ctx.fillRect(
-          0,
-          0,
-          state.canvasDimensions.width,
-          state.canvasDimensions.height
-        );
-        return fields;
 
-        // ...render the text fields
-      })
-      .then(fields => {
         fields.filter(isCanvasTextField).forEach(field => {
-          if (!!field.canvasRotation) {
-            // Save the canvas context
-            ctx.save();
-            // Translate the context origin to the text field origin...
-            ctx.translate(field.canvasX, field.canvasY);
-            // ...and rotate around it
-            ctx.rotate(field.canvasRotation);
-          }
-
           // Set some font styles
           ctx.textAlign = "start";
           ctx.fillStyle = "#000";
           ctx.textBaseline = "bottom";
           ctx.font = `${field.drawnHeight}px ${field.canvasFont}`;
 
-          if (field.canvasRotation) {
-            // Fill text on the rotated canvas
-            ctx.fillText(field.value, 0, 0);
-            // Then restore it the way it was at save above
-            ctx.restore();
+          if (field.canvasRotation !== 0) {
+            withCanvasRotation(
+              ctx,
+              field.canvasX,
+              field.canvasY,
+              field.canvasRotation,
+              () => ctx.fillText(field.value, 0, 0)
+            );
           } else {
             ctx.fillText(field.value, field.canvasX, field.canvasY);
           }
@@ -178,15 +163,14 @@ const LabelDesigner: React.FC<{
           if (!isCanvasTextField(field)) {
             if (!field.img) return;
 
-            if (!!field.canvasRotation) {
-              ctx.save();
-              ctx.translate(field.canvasX, field.canvasY);
-              ctx.rotate(field.canvasRotation);
-            }
-
-            if (field.canvasRotation) {
-              ctx.drawImage(field.img, 0, 0);
-              ctx.restore();
+            if (field.canvasRotation !== 0) {
+              withCanvasRotation(
+                ctx,
+                field.canvasX,
+                field.canvasY,
+                field.canvasRotation,
+                () => field.img && ctx.drawImage(field.img, 0, 0)
+              );
             } else {
               ctx.drawImage(field.img, field.canvasX, field.canvasY);
             }
@@ -229,17 +213,6 @@ const LabelDesigner: React.FC<{
       </div>
     </div>
   );
-};
-
-const getMousePosition = (
-  ctx: CanvasRenderingContext2D,
-  e: MouseEvent
-): CanvasPosition => {
-  const rect = ctx.canvas.getBoundingClientRect();
-  return {
-    x: ((e.clientX - rect.left) / (rect.right - rect.left)) * ctx.canvas.width,
-    y: ((e.clientY - rect.top) / (rect.bottom - rect.top)) * ctx.canvas.height
-  };
 };
 
 export default LabelDesigner;
