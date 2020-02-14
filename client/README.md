@@ -6,7 +6,7 @@
 
 ## Dependencies
 
-- NodeJS >= (v12.1)
+- NodeJS (>= v12.1)
 - Yarn
 
 The project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
