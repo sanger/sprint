@@ -2,16 +2,20 @@
 // Project: https://github.com/metafloor/bwip-js
 // Definitions by: Chris Smith <https://github.com/jbeast>
 
-declare module 'bwip-js/browser-bwipjs' {
+declare module "bwip-js/browser-bwipjs" {
   import ToCanvasOptions = BwipJs.ToCanvasOptions;
-  export = toCanvas
+  export = toCanvas;
 
-  declare function toCanvas(cvs: string | HTMLCanvasElement, opts: ToCanvasOptions, callback: (err?: string | Error, cvs?: HTMLCanvasElement) => void): void;
+  declare function toCanvas(
+    cvs: string | HTMLCanvasElement,
+    opts: ToCanvasOptions,
+    callback: (err?: string | Error, cvs?: HTMLCanvasElement) => void
+  ): void;
 }
 
 declare namespace BwipJs {
   export interface ToCanvasOptions {
-    bcid: 'code128' | 'code39' | 'datamatrix' | 'ean13';
+    bcid: "code128" | "code39" | "datamatrix" | "ean13";
     text: string;
 
     parse?: boolean;
@@ -24,7 +28,7 @@ declare namespace BwipJs {
     scaleY?: number;
     scale?: number;
 
-    rotate?: 'N'|'R'|'L'|'I';
+    rotate?: "N" | "R" | "L" | "I";
 
     paddingwidth?: number;
     paddingheight?: number;
@@ -37,8 +41,14 @@ declare namespace BwipJs {
     textsize?: number;
     textgaps?: number;
 
-    textxalign?:'offleft'|'left'|'center'|'right'|'offright'|'justify';
-    textyalign?:'below'|'center'|'above';
+    textxalign?:
+      | "offleft"
+      | "left"
+      | "center"
+      | "right"
+      | "offright"
+      | "justify";
+    textyalign?: "below" | "center" | "above";
     textxoffset?: number;
     textyoffset?: number;
 
