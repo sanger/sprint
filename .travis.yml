@@ -19,9 +19,9 @@ before_script:
 script: mvn package
 
 deploy:
+  skip_cleanup: true
   provider: releases
   token: $GITHUB_OAUTH_TOKEN
   file: "target/sprint-${TRAVIS_TAG}.jar"
-  cleanup: false
   on:
     tags: true
