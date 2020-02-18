@@ -1,0 +1,123 @@
+/* purgecss start ignore */
+@tailwind base;
+
+body {
+    background-image: linear-gradient(15deg, #EC407A, #4A148C 75%);
+}
+
+h1,h2,h3,h4,h5,h6 {
+    font-family: 'Helvetica Neue', 'Arial', sans-serif;
+}
+
+.sprint-planning {
+    display: grid;
+    grid-template-columns: 1fr 60% 1.5fr;
+    grid-template-rows: auto 1fr;
+    grid-gap: 0.5em;
+}
+
+.fade-in-appear, .fade-in-entry {
+    opacity: 0.01;
+}
+
+.fade-in-appear-active, .fade-in-entry-active {
+    opacity: 1;
+    transition: opacity 800ms ease-in-out;
+}
+
+.fade-out-exit {
+    opacity: 1;
+}
+
+.fade-out-exit-active {
+    opacity: 0;
+    transition: opacity 600ms ease-in-out;
+}
+
+.label-input-grid {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+}
+
+.label-input-grid > input {
+    justify-self: center;
+}
+
+.label-input-grid > span {
+    justify-self: end;
+}
+
+.place-self-center {
+    place-self: center;
+}
+
+svg.logo {
+    width: 300px;
+    height: 300px;
+}
+
+svg.logo.loading1 rect {
+    animation: pulse;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    animation-duration: 0.6s;
+}
+
+svg.logo.loading1 rect:nth-child(odd) {
+    animation-delay: 0.6s;
+}
+
+svg.logo.loading1 rect:nth-child(3n+1) {
+    animation-delay: 0.3s;
+}
+
+@keyframes pulse {
+    from {
+        opacity: 1
+    }
+    to {
+        opacity: 0.5;
+    }
+}
+
+@tailwind components;
+
+.heading:first-letter {
+    @apply text-yellow font-light border-yellow
+}
+
+.btn {
+    @apply p-2 bg-sanger-blue text-white border-b-2 border-sanger-blue-dark font-medium tracking-wider rounded-sm shadow-md rounded
+}
+
+.btn-transition {
+    transition: background-color 0.2s;
+}
+
+.btn-transition:hover {
+    @apply shadow-lg bg-sanger-blue-dark
+}
+
+.btn:disabled {
+    @apply opacity-50 cursor-not-allowed bg-sanger-blue-light shadow-md
+}
+
+svg.rotate-ac, svg.rotate-c {
+    transition: transform 0.2s;
+}
+
+svg.rotate-ac:hover {
+    transform: rotate(-90deg) scale(1.1);
+}
+
+svg.rotate-c:hover {
+    transform: rotate(90deg) scale(1.1);
+}
+
+.border-box {
+    box-sizing: border-box;
+}
+
+/* purgecss end ignore */
+@tailwind utilities;
