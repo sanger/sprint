@@ -5,6 +5,7 @@ node_js: "0.12"
 cache: yarn
 
 before_install:
+  - "nvm install node"
   - "cd ${TRAVIS_BUILD_DIR}/client"
 
 install: yarn install
