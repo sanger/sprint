@@ -1,4 +1,5 @@
 import { Reducer, useEffect, useReducer } from "react";
+import _ from "lodash";
 
 import { Action, UpdateCanvasField } from "./actions";
 import {
@@ -17,7 +18,11 @@ import {
 } from "../../factories/CanvasFieldFactory";
 import { HookRouter, useQueryParams } from "hookrouter";
 import { buildPrintRequest } from "../../factories/PrintRequestFactory";
-import { PrintRequest, Rotation } from "../../types/graphql-global-types";
+import {
+  Layout,
+  PrintRequest,
+  Rotation
+} from "../../types/graphql-global-types";
 import { LabelTypes_labelTypes } from "../../queries/types/LabelTypes";
 
 // What the URL query parameters should look like
@@ -60,22 +65,62 @@ const useLayoutReducer = (): [AppState, (action: Action) => void] => {
   // Hook to get and set URL query parameters
   const [queryParams, setQueryParams] = useQueryParams();
   const [state, dispatch] = useReducer(reducer, queryParams, init);
+  const {
+    labelTypes,
+    labelType,
+    canvasFields,
+    ctx,
+    initialQueryParams
+  } = state;
 
+  // Add canvas fields from the initial query params
+  useEffect(() => {
+    // If there was no label type in the URL do nothing
+    if (!initialQueryParams?.labelType || !ctx) return;
+
+    // Otherwise find it...
+    let labelType = _.find(labelTypes, {
+      name: initialQueryParams.labelType
+    });
+    if (!labelType) return;
+
+    // Set it as the current label type
+    dispatch({ type: "SET_LABEL_TYPE", labelType });
+
+    // Build any fields from the URL too
+    initialQueryParams?.printRequest?.layouts?.forEach((layout: Layout) => {
+      layout?.barcodeFields?.forEach(barcodeField => {
+        dispatch({
+          type: "ADD_CANVAS_BARCODE_FIELD",
+          options: barcodeField
+        });
+      });
+
+      layout?.textFields?.forEach(textField => {
+        dispatch({
+          type: "ADD_CANVAS_TEXT_FIELD",
+          options: textField
+        });
+      });
+    });
+  }, [dispatch, labelTypes, ctx, initialQueryParams]);
+
+  // Update the query params with canvasFields' information
   useEffect(() => {
     let newQueryParams: queryParams = {};
 
-    if (state.labelType) {
-      newQueryParams.labelType = state.labelType.name;
+    if (labelType) {
+      newQueryParams.labelType = labelType.name;
     }
 
-    if (state.canvasFields) {
+    if (canvasFields) {
       newQueryParams.printRequest = JSON.stringify(
-        buildPrintRequest(state.canvasFields)
+        buildPrintRequest(canvasFields)
       );
     }
 
     setQueryParams(newQueryParams, true);
-  }, [setQueryParams, state.labelType, state.canvasFields]);
+  }, [setQueryParams, labelTypes, labelType, canvasFields]);
 
   return [state, dispatch];
 };

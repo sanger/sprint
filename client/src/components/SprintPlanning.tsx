@@ -1,5 +1,4 @@
 import React, { useCallback } from "react";
-import _ from "lodash";
 import { useQuery } from "@apollo/react-hooks";
 
 import LabelTypeSelector from "./LabelTypeSelector";
@@ -14,47 +13,13 @@ import { LabelTypes } from "../queries/types/LabelTypes";
 
 import Loading from "./Loading";
 import { CSSTransition } from "react-transition-group";
-import { Layout } from "../types/graphql-global-types";
 
 const SprintPlanning: React.FC = () => {
   const [state, dispatch] = useLayoutReducer();
   const minimumWaitElapsed = useMinimumWait(1200);
   const { loading, error } = useQuery<LabelTypes>(labelTypesQuery, {
     onCompleted: data => {
-      // Set the label types available
       dispatch({ type: "SET_LABEL_TYPES", value: data.labelTypes });
-
-      // If there was no label type in the URL do nothing
-      if (!state?.initialQueryParams?.labelType) return;
-
-      // Otherwise find it...
-      let labelType = _.find(data.labelTypes, {
-        name: state.initialQueryParams.labelType
-      });
-
-      if (!labelType) return;
-
-      // Set it as the current label type
-      dispatch({ type: "SET_LABEL_TYPE", labelType });
-
-      // Build any fields from the URL too
-      state.initialQueryParams?.printRequest?.layouts?.forEach(
-        (layout: Layout) => {
-          layout?.barcodeFields?.forEach(barcodeField => {
-            dispatch({
-              type: "ADD_CANVAS_BARCODE_FIELD",
-              options: barcodeField
-            });
-          });
-
-          layout?.textFields?.forEach(textField => {
-            dispatch({
-              type: "ADD_CANVAS_TEXT_FIELD",
-              options: textField
-            });
-          });
-        }
-      );
     }
   });
 
