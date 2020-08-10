@@ -13,21 +13,21 @@ The GraphiQL front end can be used to view the form of requests accepted by the 
 
 ## Adding new CAB Squix label printers
 
-### Printer Administration
+**Printer Administration**
 
-- Under Setup -> Interfaces -> Network Services, make sure `FTP` and `Web service` are on
-- Under Security, make sure the password for `ftpprint` matches `SPrint` deployment configuration
-- Under Security, make sure `Security web service` is set to none
+- Under `Setup -> Interfaces -> Network Services`, make sure `FTP` and `Web service` are on
+- Under `Security`, make sure the password for `ftpprint` matches `SPrint` deployment configuration
+- Under `Security`, make sure `Security web service` is set to none
 
-### OpenStack Administration
+**OpenStack Administration**
 
 - Ensure ports for FTP (22) and HTTP (80) are open
 
-### SPrint Config
+**SPrint Config**
 
 - Add the new printer in the `cgap.xml` config file (in the `SPrint` deployment project)
 
-### Systems
+**Systems**
 
-- Email systems to ask for access to the new printer to be allowed from OpenStack over HTTP and FTP
+- Email Systems to ask for access to the new printer to be allowed from OpenStack over HTTP and FTP
 
