@@ -28,8 +28,9 @@ public class ConfigLoaderTest {
     @BeforeClass
     private void setup() {
         printerTypes = Arrays.asList(
-                new PrinterType("PT0", PrinterLanguage.JSCRIPT, Protocol.FTP, null, new Credentials("alpha", "beta")),
-                new PrinterType("PT1", PrinterLanguage.JSCRIPT, Protocol.FTP, StatusProtocol.SOAP, null)
+                new PrinterType("PT0", PrinterLanguage.JSCRIPT, Protocol.FTP, null, new Credentials("alpha", "beta"),
+                        new Credentials("gamma", "delta")),
+                new PrinterType("PT1", PrinterLanguage.JSCRIPT, Protocol.FTP, StatusProtocol.SOAP, null, null)
         );
         labelTypes = Arrays.asList(
                 new LabelType(10, 20, 30, "lt0"),

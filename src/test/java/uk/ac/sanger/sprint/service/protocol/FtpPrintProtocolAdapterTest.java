@@ -1,7 +1,9 @@
 package uk.ac.sanger.sprint.service.protocol;
 
 import org.mockito.Mock;
-import org.testng.annotations.*;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 import uk.ac.sanger.sprint.model.*;
 
 import java.io.IOException;
@@ -34,7 +36,7 @@ public class FtpPrintProtocolAdapterTest {
     private void setup() throws IOException {
         credentials = new Credentials("jeff", "swordfish");
         PrinterType printerType = new PrinterType("ftpprinter", PrinterLanguage.JSCRIPT, Protocol.FTP,
-                null, credentials);
+                null, credentials, null);
         LabelType labelType = new LabelType(30, 12, 16, "tiny");
         printer = new Printer("myprinter", printerType, labelType);
     }
