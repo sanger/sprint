@@ -6,6 +6,11 @@
         <printerType>squix</printerType>
     </printer>
     <printer>
+        <hostname>slidelabel</hostname>
+        <labelType>thin</labelType>
+        <printerType>squix</printerType>
+    </printer>
+    <printer>
         <hostname>stub</hostname>
         <labelType>thin</labelType>
         <printerType>stub</printerType>
@@ -13,10 +18,14 @@
 
     <printer_type>
         <name>squix</name>
-        <credentials>
+        <ftpCredentials>
             <password>print</password>
             <username>ftpprint</username>
-        </credentials>
+        </ftpCredentials>
+        <soapCredentials>
+            <password>statuscheck</password>
+            <username>soap</username>
+        </soapCredentials>
         <language>JSCRIPT</language>
         <protocol>FTP</protocol>
         <statusProtocol>SOAP</statusProtocol>

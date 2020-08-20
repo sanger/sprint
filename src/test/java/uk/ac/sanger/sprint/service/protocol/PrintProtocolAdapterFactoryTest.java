@@ -3,7 +3,10 @@ package uk.ac.sanger.sprint.service.protocol;
 import org.springframework.boot.ApplicationArguments;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import uk.ac.sanger.sprint.model.*;
+import uk.ac.sanger.sprint.model.Printer;
+import uk.ac.sanger.sprint.model.PrinterLanguage;
+import uk.ac.sanger.sprint.model.PrinterType;
+import uk.ac.sanger.sprint.model.Protocol;
 import uk.ac.sanger.sprint.service.language.PrinterLanguageAdapterFactory;
 
 import java.util.Collections;
@@ -29,7 +32,7 @@ public class PrintProtocolAdapterFactoryTest {
     }
 
     private Printer printer(Protocol protocol) {
-        PrinterType pt = new PrinterType("mypt", PrinterLanguage.JSCRIPT, protocol, null, null);
+        PrinterType pt = new PrinterType("mypt", PrinterLanguage.JSCRIPT, protocol, null, null, null);
         return new Printer("myprinter", pt, null);
     }
 

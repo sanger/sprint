@@ -16,7 +16,8 @@ public class PrinterType {
     private Protocol protocol;
     private StatusProtocol statusProtocol;
 
-    private Credentials credentials;
+    private Credentials ftpCredentials;
+    private Credentials soapCredentials;
 
     private List<Printer> printers = new ArrayList<>();
 
@@ -32,15 +33,17 @@ public class PrinterType {
      * @param language the printer language
      * @param protocol the printing protocol
      * @param statusProtocol the protocol for checking the status of a print job
-     * @param credentials the credentials for accessing the printer (if any)
+     * @param ftpCredentials the credentials for accessing the printer over FTP (if any)
+     * @param soapCredentials the credentials for accessing the printer over SOAP (if any)
      */
     public PrinterType(String name, PrinterLanguage language, Protocol protocol, StatusProtocol statusProtocol,
-                       Credentials credentials) {
+                       Credentials ftpCredentials, Credentials soapCredentials) {
         this.name = name;
         this.language = language;
         this.protocol = protocol;
         this.statusProtocol = statusProtocol;
-        this.credentials = credentials;
+        this.ftpCredentials = ftpCredentials;
+        this.soapCredentials = soapCredentials;
     }
 
     /**
@@ -109,20 +112,37 @@ public class PrinterType {
     }
 
     /**
-     * Gets the credentials for this printer type.
-     * Not all printer types require credentials
-     * @return the credentials, or null
+     * Gets the FTP credentials for this printer type.
+     * Not all printer types require FTP credentials
+     * @return the FTP credentials, or null
      */
-    public Credentials getCredentials() {
-        return credentials;
+    public Credentials getFtpCredentials() {
+        return ftpCredentials;
     }
 
     /**
-     * Sets the credentials for this printer type
-     * @param credentials the new credentials, or null
+     * Sets the FTP credentials for this printer type
+     * @param ftpCredentials the new FTP credentials, or null
      */
-    public void setCredentials(Credentials credentials) {
-        this.credentials = credentials;
+    public void setFtpCredentials(Credentials ftpCredentials) {
+        this.ftpCredentials = ftpCredentials;
+    }
+
+    /**
+     * Gets the SOAP credentials for this printer type.
+     * Not all printer types require SOAP credentials
+     * @return the SOAP credentials, or null
+     */
+    public Credentials getSoapCredentials() {
+        return soapCredentials;
+    }
+
+    /**
+     * Sets the SOAP credentials for this printer type
+     * @param soapCredentials the new SOAP credentials, or null
+     */
+    public void setSoapCredentials(Credentials soapCredentials) {
+        this.soapCredentials = soapCredentials;
     }
 
     /**

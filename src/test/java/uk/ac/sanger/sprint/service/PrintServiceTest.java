@@ -63,7 +63,7 @@ public class PrintServiceTest {
     }
 
     private void mockPrinter(StatusProtocol statusProtocol) {
-        PrinterType printerType = new PrinterType("tt", PrinterLanguage.JSCRIPT, Protocol.FTP, statusProtocol, null);
+        PrinterType printerType = new PrinterType("tt", PrinterLanguage.JSCRIPT, Protocol.FTP, statusProtocol, null, null);
         when(mockPrinter.getPrinterType()).thenReturn(printerType);
         when(mockPrinter.getHostname()).thenReturn("printerhost");
     }

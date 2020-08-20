@@ -22,7 +22,7 @@ public class FtpPrintProtocolAdapter implements PrintProtocolAdapter {
 
     @Override
     public void print(String printCode) throws IOException {
-        Credentials credentials = printer.getPrinterType().getCredentials();
+        Credentials credentials = printer.getPrinterType().getFtpCredentials();
         if (credentials==null) {
             throw new IllegalArgumentException("No credentials supplied for FTP print");
         }
