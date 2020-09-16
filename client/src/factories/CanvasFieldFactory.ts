@@ -15,7 +15,7 @@ import {
   Rotation,
   TextField
 } from "../types/graphql-global-types";
-import { is2D } from "../models/barcodes";
+import { getDimensionsCalculatorByBarcodeType } from "./dimension_calculators/DimensionsCalculator";
 
 /**
  * Factory method for creating a TextField
@@ -134,16 +134,21 @@ export const buildCanvasBarcodeField = (
   let yRatio = barcodeField.y / labelType.height;
   let cellWidthRatio = barcodeField.cellWidth / labelType.width;
 
-  let drawnHeight = 0;
+  const dimensionsCalculator = getDimensionsCalculatorByBarcodeType(
+    barcodeField.barcodeType
+  );
 
-  if (!is2D(barcodeField.barcodeType) && barcodeField.height) {
-    drawnHeight =
-      (barcodeField.height / labelType.height) * canvasDimensions.height;
-  }
-
-  const canvasBarcodeField: CanvasBarcodeField = {
-    drawnHeight,
-    drawnWidth: 0, // Don't know what this is until it's actually drawn
+  return {
+    drawnWidth: dimensionsCalculator.getDrawnWidth(
+      barcodeField,
+      labelType,
+      canvasDimensions
+    ),
+    drawnHeight: dimensionsCalculator.getDrawnHeight(
+      barcodeField,
+      labelType,
+      canvasDimensions
+    ),
     drawnCellWidth: canvasDimensions.width * cellWidthRatio,
     canvasX: canvasDimensions.width * xRatio,
     canvasY: canvasDimensions.height * yRatio,
@@ -157,8 +162,6 @@ export const buildCanvasBarcodeField = (
     value: barcodeField.value,
     height: barcodeField.height
   };
-
-  return canvasBarcodeField;
 };
 
 export const buildCanvasField = (

@@ -4,7 +4,6 @@ import { memoize } from "lodash";
 import IBarcodeGenerator from "./IBarcodeGenerator";
 import { BarcodeField, BarcodeType } from "../../types/graphql-global-types";
 import { CanvasBarcodeField } from "../../types";
-import { is2D } from "../barcodes";
 
 enum BwipBarcodeTypes {
   code128 = "code128",
@@ -28,15 +27,10 @@ const bwipBarcodeGenerator: IBarcodeGenerator = (
     let options: BwipJs.ToCanvasOptions = {
       bcid: getBarcodeType(canvasBarcodeField), // Barcode type
       text: canvasBarcodeField.canvasValue, // Text to encode
-      scaleX: canvasBarcodeField.cellWidth * 10, // X scaling factor
-      scaleY: 1
+      scale: 1,
+      width: canvasBarcodeField.drawnWidth / SCALING_FACTOR,
+      height: canvasBarcodeField.drawnHeight / SCALING_FACTOR
     };
-
-    if (is2D(canvasBarcodeField.barcodeType)) {
-      options.scaleY = options.scaleX;
-    } else if (canvasBarcodeField.drawnHeight) {
-      options.height = canvasBarcodeField.drawnHeight / SCALING_FACTOR;
-    }
 
     toCanvas(detachedCanvas, options, function(err, cvs) {
       if (err) {

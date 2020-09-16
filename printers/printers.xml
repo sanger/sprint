@@ -2,14 +2,16 @@
 <config>
     <printer>
         <hostname>cgaptestbc</hostname>
-        <labelType>thin</labelType>
+        <labelType>tiny</labelType>
         <printerType>squix</printerType>
     </printer>
+
     <printer>
         <hostname>slidelabel</hostname>
-        <labelType>thin</labelType>
+        <labelType>slide</labelType>
         <printerType>squix</printerType>
     </printer>
+
     <printer>
         <hostname>stub</hostname>
         <labelType>thin</labelType>
@@ -17,35 +19,45 @@
     </printer>
 
     <printer_type>
-        <name>squix</name>
         <ftpCredentials>
-            <password>print</password>
-            <username>ftpprint</username>
+            <password>ftp_password</password>
+            <username>ftp_username</username>
         </ftpCredentials>
         <soapCredentials>
-            <password>statuscheck</password>
-            <username>soap</username>
+            <password>soap_password</password>
+            <username>soap_username</username>
         </soapCredentials>
         <language>JSCRIPT</language>
+        <name>squix</name>
         <protocol>FTP</protocol>
         <statusProtocol>SOAP</statusProtocol>
     </printer_type>
+
     <printer_type>
         <name>stub</name>
         <language>JSCRIPT</language>
         <protocol>STUB</protocol>
     </printer_type>
 
+
     <label_type>
+        <displacement>12</displacement>
+        <height>9</height>
         <name>tiny</name>
-        <displacement>15</displacement>
-        <height>12</height>
-        <width>30</width>
+        <width>28</width>
     </label_type>
+
     <label_type>
-        <name>thin</name>
         <displacement>11</displacement>
         <height>8</height>
         <width>90</width>
+        <name>thin</name>
+    </label_type>
+
+    <label_type>
+        <displacement>22</displacement>
+        <height>19</height>
+        <width>23</width>
+        <name>slide</name>
     </label_type>
 </config>
