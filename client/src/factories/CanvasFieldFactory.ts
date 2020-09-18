@@ -88,6 +88,17 @@ export const buildCanvasTextField = (
 };
 
 /**
+ * Return a random hex number as a string (including trailing zeroes)
+ * @param length length of the hex string
+ */
+function randomHexString(length: number) {
+  return Math.random()
+    .toString(16)
+    .slice(2, 2 + length)
+    .toUpperCase();
+}
+
+/**
  * Factory method for a BarcodeField
  *
  * @param {Partial<CanvasBarcodeField>} options
@@ -106,7 +117,7 @@ export const buildBarcodeField = (
       rotation: Rotation.north,
       barcodeType: BarcodeType.code128,
       cellWidth: 0.1,
-      value: "XYZ123",
+      value: `CGAP-${randomHexString(5)}`,
       height: labelType ? labelType.height / 4 : 1
     },
     options
