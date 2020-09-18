@@ -82,7 +82,7 @@ The client will then be available as the root page.
 
 - [ ] Export label templates
 - [ ] Import label templates
-- [ ] Scaling of 2D barcodes
+- [x] ~~Scaling of 2D barcodes~~
 - [ ] Print requests offer no feedback
 - [ ] When selecting an EAN13 barcode type, app doesn't show error if value isn't a valid EAN13
 - [ ] No tests 🤦🏻‍♀️

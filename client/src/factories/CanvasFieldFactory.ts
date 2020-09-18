@@ -15,7 +15,7 @@ import {
   Rotation,
   TextField
 } from "../types/graphql-global-types";
-import { is2D } from "../models/barcodes";
+import { getDimensionsCalculatorByBarcodeType } from "./dimension_calculators/DimensionsCalculator";
 
 /**
  * Factory method for creating a TextField
@@ -88,6 +88,17 @@ export const buildCanvasTextField = (
 };
 
 /**
+ * Return a random hex number as a string (including trailing zeroes)
+ * @param length length of the hex string
+ */
+function randomHexString(length: number) {
+  return Math.random()
+    .toString(16)
+    .slice(2, 2 + length)
+    .toUpperCase();
+}
+
+/**
  * Factory method for a BarcodeField
  *
  * @param {Partial<CanvasBarcodeField>} options
@@ -106,7 +117,7 @@ export const buildBarcodeField = (
       rotation: Rotation.north,
       barcodeType: BarcodeType.code128,
       cellWidth: 0.1,
-      value: "XYZ123",
+      value: `CGAP-${randomHexString(6)}`,
       height: labelType ? labelType.height / 4 : 1
     },
     options
@@ -134,16 +145,21 @@ export const buildCanvasBarcodeField = (
   let yRatio = barcodeField.y / labelType.height;
   let cellWidthRatio = barcodeField.cellWidth / labelType.width;
 
-  let drawnHeight = 0;
+  const dimensionsCalculator = getDimensionsCalculatorByBarcodeType(
+    barcodeField.barcodeType
+  );
 
-  if (!is2D(barcodeField.barcodeType) && barcodeField.height) {
-    drawnHeight =
-      (barcodeField.height / labelType.height) * canvasDimensions.height;
-  }
-
-  const canvasBarcodeField: CanvasBarcodeField = {
-    drawnHeight,
-    drawnWidth: 0, // Don't know what this is until it's actually drawn
+  return {
+    drawnWidth: dimensionsCalculator.getDrawnWidth(
+      barcodeField,
+      labelType,
+      canvasDimensions
+    ),
+    drawnHeight: dimensionsCalculator.getDrawnHeight(
+      barcodeField,
+      labelType,
+      canvasDimensions
+    ),
     drawnCellWidth: canvasDimensions.width * cellWidthRatio,
     canvasX: canvasDimensions.width * xRatio,
     canvasY: canvasDimensions.height * yRatio,
@@ -157,8 +173,6 @@ export const buildCanvasBarcodeField = (
     value: barcodeField.value,
     height: barcodeField.height
   };
-
-  return canvasBarcodeField;
 };
 
 export const buildCanvasField = (
