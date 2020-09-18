@@ -117,7 +117,7 @@ export const buildBarcodeField = (
       rotation: Rotation.north,
       barcodeType: BarcodeType.code128,
       cellWidth: 0.1,
-      value: `CGAP-${randomHexString(5)}`,
+      value: `CGAP-${randomHexString(6)}`,
       height: labelType ? labelType.height / 4 : 1
     },
     options
