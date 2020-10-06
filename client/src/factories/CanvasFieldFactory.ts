@@ -118,7 +118,7 @@ export const buildBarcodeField = (
       barcodeType: BarcodeType.code128,
       cellWidth: 0.1,
       value: `CGAP-${randomHexString(6)}`,
-      height: labelType ? labelType.height / 4 : 1
+      height: labelType ? Math.ceil(labelType.height / 4) : 1
     },
     options
   );
