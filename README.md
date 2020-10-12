@@ -17,7 +17,7 @@ The GraphiQL front end can be used to view the form of requests accepted by the 
 
 - Under `Setup -> Interfaces -> Network Services`, make sure `FTP` and `Web service` are on
 - Under `Security`, make sure the password for `ftpprint` matches `SPrint` deployment configuration
-- Under `Security`, make sure `Security web service` is set to none
+- Under `Security`, make sure `Security web service` is set to `Basic` and the `Password web service` value matches the value in the `SPrint` deployment configuration.
 
 **OpenStack Administration**
 
