@@ -21,7 +21,7 @@ The GraphiQL front end can be used to view the form of requests accepted by the 
 
 **OpenStack Administration**
 
-- Ensure ports for FTP (22) and HTTP (80) are open
+- Ensure ports for FTP (21) and HTTP (80) are open
 
 **SPrint Config**
 
