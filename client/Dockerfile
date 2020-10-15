@@ -1,4 +1,4 @@
-FROM yarn
+FROM node
 
 WORKDIR /client/
 
