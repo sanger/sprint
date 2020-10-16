@@ -7,11 +7,3 @@ services:
     build: .
     ports:
       - "8080:8080"
-  client:
-    container_name: client
-    restart: always
-    build: ./client
-    ports:
-      - "3000:3000"
-    depends_on:
-      - api
