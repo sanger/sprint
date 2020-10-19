@@ -31,3 +31,13 @@ The GraphiQL front end can be used to view the form of requests accepted by the 
 
 - Email Systems to ask for access to the new printer to be allowed from OpenStack over HTTP and FTP
 
+**Docker**
+
+- Added docker for back end which would allow users to set it up without having to install IntelliJ.
+
+Usage:
+- `docker-compose build`: builds container
+- `docker-compose up`: starts it up
+- `docker-compose down`: shuts it down
+- TODO: tried doing the same for client. It worked but kept getting proxy error because it was in the same container. Something to come back to with a bit more Docker experience.
+
