@@ -34,19 +34,6 @@ h1,h2,h3,h4,h5,h6 {
     transition: opacity 600ms ease-in-out;
 }
 
-.label-input-grid {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-}
-
-.label-input-grid > input {
-    justify-self: center;
-}
-
-.label-input-grid > span {
-    justify-self: end;
-}
-
 .place-self-center {
     place-self: center;
 }
