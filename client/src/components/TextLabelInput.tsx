@@ -12,10 +12,11 @@ const TextLabelInput: React.FC<{
   labelType: Printers_printers_labelType;
 }> = ({ canvasTextField, onInputChange, labelType }) => {
   return (
-    <div className="label-input-grid mt-3">
+    <div className="grid grid-cols-4 space-x-2 mt-3">
       <label htmlFor="fontSize">Size:</label>
       <input
         id="fontSize"
+        className="col-span-2"
         type="range"
         min="0.1"
         max={labelType.height}
@@ -23,11 +24,12 @@ const TextLabelInput: React.FC<{
         onChange={onInputChange("fontSize")}
         value={canvasTextField.fontSize}
       />
-      <span>{canvasTextField.fontSize}</span>
+      <span className="text-right">{canvasTextField.fontSize}</span>
 
       <label htmlFor="textX">X:</label>
       <input
         id="textX"
+        className="col-span-2"
         type="range"
         min="0"
         max={labelType.width}
@@ -35,11 +37,12 @@ const TextLabelInput: React.FC<{
         onChange={onInputChange("x")}
         value={canvasTextField.x}
       />
-      <span>{canvasTextField.x}</span>
+      <span className="text-right">{canvasTextField.x}</span>
 
       <label htmlFor="textY">Y:</label>
       <input
         id="textY"
+        className="col-span-2"
         type="range"
         min="0"
         max={labelType.height}
@@ -47,7 +50,7 @@ const TextLabelInput: React.FC<{
         onChange={onInputChange("y")}
         value={canvasTextField.y}
       />
-      <span>{canvasTextField.y}</span>
+      <span className="text-right">{canvasTextField.y}</span>
     </div>
   );
 };
