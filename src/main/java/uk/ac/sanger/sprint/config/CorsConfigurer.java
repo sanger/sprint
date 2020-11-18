@@ -22,6 +22,6 @@ public class CorsConfigurer implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/graphql").allowedOrigins(getOrigins());
+        registry.addMapping("/graphql").allowedOrigins(getOrigins()).allowCredentials(true);
     }
 }
