@@ -55,7 +55,7 @@ class ConfigLoaderImplementation implements ConfigLoader {
                 .collect(Collectors.toMap(PrinterType::getName, Function.identity()));
         Map<String, Printer> printers = configs.stream()
                 .flatMap(cf -> cf.getEntries().stream())
-                .map(e -> new Printer(e.getHostname(), printerTypes.get(e.getPrinterType()), labelTypes.get(e.getLabelType())))
+                .map(e -> toPrinter(e, printerTypes, labelTypes))
                 .collect(Collectors.toMap(Printer::getHostname, Function.identity()));
 
         for (Printer printer: printers.values()) {
@@ -64,6 +64,18 @@ class ConfigLoaderImplementation implements ConfigLoader {
         }
 
         return new Config(printers, new ArrayList<>(labelTypes.values()), printerTypes);
+    }
+
+    private static Printer toPrinter(PrinterEntry e, Map<String, PrinterType> printerTypes, Map<String, LabelType> labelTypes) {
+        PrinterType printerType = printerTypes.get(e.getPrinterType());
+        if (printerType==null) {
+            throw new RuntimeException("Unknown printer type: "+e.getPrinterType());
+        }
+        LabelType labelType = labelTypes.get(e.getLabelType());
+        if (labelType==null) {
+            throw new RuntimeException("Unknown label type: "+e.getLabelType());
+        }
+        return new Printer(e.getHostname(), printerType, labelType);
     }
 
     private static boolean hasExtension(Path path, String extension) {
