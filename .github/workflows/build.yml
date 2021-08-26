@@ -6,7 +6,8 @@ name: Build
 # Controls when the action will run. Triggers the workflow on version tags.
 on:
   push:
-    tags: [0-9.]+
+    tags:
+      - [0-9.]+
 
 jobs:
   build:
