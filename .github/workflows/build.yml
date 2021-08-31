@@ -28,9 +28,13 @@ jobs:
     
     - name: Rename the build
       run: mv target/*.jar target/sprint.jar
-  
-    - name: Upload the artifact
-      uses: actions/upload-artifact@v2.1.4
+
+    - name: Create a release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        name: sprint.jar
-        path: target/sprint.jar
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
