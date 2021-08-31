@@ -26,11 +26,8 @@ jobs:
     - name: Build with Maven
       run: mvn -B package -Dmaven.test.skip=true --file pom.xml
     
-    - name: Rename the build
-      run: mv target/*.jar target/sprint.jar
-  
-    - name: Upload the artifact
-      uses: actions/upload-artifact@v2.1.4
+    - name: Create a release
+      uses: ncipollo/release-action@v1
       with:
-        name: sprint.jar
-        path: target/sprint.jar
+        artifacts: "target/sprint*.jar"
+        token: ${{ secrets.GITHUB_TOKEN }}
