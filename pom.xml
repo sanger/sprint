@@ -10,7 +10,7 @@
     </parent>
     <groupId>uk.ac.sanger</groupId>
     <artifactId>sprint</artifactId>
-    <version>0.2.10</version>
+    <version>0.3.0</version>
     <name>SPrint</name>
     <description>Simple print service</description>
 
