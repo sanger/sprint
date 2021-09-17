@@ -59,7 +59,8 @@ public class GraphQLProvider {
                         .dataFetcher("printStatus", graphQLDataFetchers.getPrintStatus())
                         .dataFetcher("labelTypes", graphQLDataFetchers.getLabelTypes()))
                 .type(newTypeWiring("Mutation")
-                        .dataFetcher("print", graphQLDataFetchers.print()))
+                        .dataFetcher("print", graphQLDataFetchers.print())
+                        .dataFetcher("reloadConfig", graphQLDataFetchers.reloadConfig()))
                 .build();
     }
 }

@@ -43,6 +43,8 @@ type Mutation {
     # Print some labels.
     # If the printer is not in config, the printerType must be specified
     print(printRequest: PrintRequest!, printer: String!, printerType: String): PrintResult
+    # Reload the printer config from files
+    reloadConfig: [Printer!]!
 }
 
 type PrinterType {

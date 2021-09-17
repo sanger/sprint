@@ -20,8 +20,10 @@ import static java.util.Objects.requireNonNull;
 public class GraphQLDataFetchers {
     private final ObjectMapper objectMapper;
     private final PrintService printService;
+    private final ConfigLoader configLoader;
+    private final List<Path> configPaths;
 
-    private final Config config;
+    private Config config;
 
     public GraphQLDataFetchers(ConfigLoader configLoader, ObjectMapper objectMapper, PrintService printService,
                                ApplicationArguments arguments) {
@@ -30,7 +32,6 @@ public class GraphQLDataFetchers {
         this.printService = requireNonNull(printService, "printService is null");
         requireNonNull(arguments, "applicationArguments is null");
         List<String> configArgs = arguments.getOptionValues("config");
-        List<Path> configPaths;
         if (configArgs==null || configArgs.isEmpty()) {
             configPaths = Collections.singletonList(Paths.get("printers"));
         } else {
@@ -38,14 +39,16 @@ public class GraphQLDataFetchers {
                     .map(Paths::get)
                     .collect(Collectors.toList());
         }
+        this.configLoader = configLoader;
         this.config = configLoader.loadConfig(configPaths);
     }
 
-    public DataFetcher getPrinters() {
+    public DataFetcher<Collection<Printer>> getPrinters() {
         return dataFetchingEnvironment -> {
+            final Config config = this.config;
             String labelTypeName = dataFetchingEnvironment.getArgument("labelType");
             if (labelTypeName==null) {
-                return new ArrayList<>(config.getPrinters().values());
+                return config.getPrinters().values();
             }
             return config.getPrinters().values().stream()
                     .filter(p -> p.getLabelType().getName().equals(labelTypeName))
@@ -61,13 +64,13 @@ public class GraphQLDataFetchers {
         return printer;
     }
 
-    public DataFetcher print() {
+    public DataFetcher<PrintResult> print() {
         return dataFetchingEnvironment -> {
+            final Config config = this.config;
             Map<String, String> map = dataFetchingEnvironment.getArgument("printRequest");
             PrintRequest req = objectMapper.convertValue(map, PrintRequest.class);
             String printerName = dataFetchingEnvironment.getArgument("printer");
             String printerTypeName = dataFetchingEnvironment.getArgument("printerType");
-
 
             PrinterType printerType = null;
             if (printerTypeName!=null) {
@@ -93,7 +96,7 @@ public class GraphQLDataFetchers {
         };
     }
 
-    public DataFetcher getPrintStatus() {
+    public DataFetcher<PrintStatus> getPrintStatus() {
         return dataFetchingEnvironment -> {
             String joinedId = dataFetchingEnvironment.getArgument("jobId");
             int colon = joinedId.lastIndexOf(":");
@@ -104,11 +107,21 @@ public class GraphQLDataFetchers {
         };
     }
 
-    public DataFetcher getLabelTypes() {
+    public DataFetcher<List<LabelType>> getLabelTypes() {
         return dataFetchingEnvironment -> config.getLabelTypes();
     }
 
-    public DataFetcher getPrinterTypes() {
+    public DataFetcher<Collection<PrinterType>> getPrinterTypes() {
         return dataFetchingEnvironment -> config.getPrinterTypes().values();
+    }
+
+    public DataFetcher<Iterable<Printer>> reloadConfig() {
+        return dfe -> {
+            final Config newConfig = configLoader.loadConfig(configPaths);
+            synchronized (this) {
+                this.config = newConfig;
+            }
+            return newConfig.getPrinters().values();
+        };
     }
 }
