@@ -47,7 +47,7 @@ public class FTPStore {
             log.debug("connecting");
             ftp.connect(server);
             if (!ftp.isConnected()) {
-                log.info("Failed to connect");
+                log.info("FTP: failed to connect to {}", server);
                 return false;
             }
             log.debug("entering passive mode");
@@ -58,17 +58,17 @@ public class FTPStore {
             }
             log.debug("logging in");
             if (!ftp.login(username, password)) {
-                log.info("Failed to log in");
+                log.info("FTP: failed to log in to {}", server);
                 return false;
             }
             log.debug("storing file");
             try (InputStream fis = makeInputStream(content)) {
                 if (!ftp.storeFile(filename, fis)) {
-                    log.info("Failed to store file");
+                    log.info("FTP: failed to store file on {}", server);
                     return false;
                 }
             }
-            log.info("File sent");
+            log.info("FTP: file sent to {}", server);
         } finally {
             if (ftp.isConnected()) {
                 ftp.disconnect();
