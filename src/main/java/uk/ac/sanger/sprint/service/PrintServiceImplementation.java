@@ -1,5 +1,7 @@
 package uk.ac.sanger.sprint.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import uk.ac.sanger.sprint.model.*;
 import uk.ac.sanger.sprint.service.language.PrinterLanguageAdapter;
@@ -16,6 +18,8 @@ import static java.util.Objects.requireNonNull;
 
 @Component
 public class PrintServiceImplementation implements PrintService {
+    Logger log = LoggerFactory.getLogger(PrintServiceImplementation.class);
+
     private final PrinterLanguageAdapterFactory printerLanguageAdapterFactory;
     private final PrintProtocolAdapterFactory printProtocolAdapterFactory;
     private final StatusProtocolAdapterFactory statusProtocolAdapterFactory;
@@ -30,6 +34,7 @@ public class PrintServiceImplementation implements PrintService {
 
     @Override
     public String print(PrintRequest request, Printer printer) throws IOException  {
+        log.info("Print to {}: {}", printer.getHostname(), request);
         String jobId = UUID.randomUUID().toString();
         PrinterLanguageAdapter languageAdapter = printerLanguageAdapterFactory.getLanguageAdapter(printer);
         String printCode = languageAdapter.transcribe(request, jobId);

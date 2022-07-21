@@ -61,4 +61,13 @@ public class BarcodeField extends Field {
     public void setCellWidth(float cellWidth) {
         this.cellWidth = cellWidth;
     }
+
+    @Override
+    public String toString() {
+        return stringHelper()
+                .add("height", height)
+                .add("cellWidth", cellWidth)
+                .add("barcodeType", barcodeType)
+                .toString();
+    }
 }

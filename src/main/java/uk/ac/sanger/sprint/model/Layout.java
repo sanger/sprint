@@ -1,5 +1,7 @@
 package uk.ac.sanger.sprint.model;
 
+import com.google.common.base.MoreObjects;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -58,5 +60,14 @@ public class Layout {
      */
     public void setLabelSize(LabelSize labelSize) {
         this.labelSize = labelSize;
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("labelSize", labelSize)
+                .add("textFields", textFields)
+                .add("barcodeFields", barcodeFields)
+                .toString();
     }
 }

@@ -1,5 +1,9 @@
 package uk.ac.sanger.sprint.model;
 
+import com.google.common.base.MoreObjects;
+
+import static uk.ac.sanger.sprint.utils.BasicUtils.repr;
+
 /**
  * A base class for fields on the label.
  * Fields have a value, a rotation, and a position.
@@ -73,5 +77,13 @@ abstract class Field {
      */
     public void setValue(String value) {
         this.value = value;
+    }
+
+    protected MoreObjects.ToStringHelper stringHelper() {
+        return MoreObjects.toStringHelper(this)
+                .add("x", getX())
+                .add("y", getY())
+                .add("rotation", getRotation())
+                .add("value", repr(getValue()));
     }
 }

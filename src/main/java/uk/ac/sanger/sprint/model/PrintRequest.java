@@ -37,4 +37,9 @@ public class PrintRequest {
     public void setLayouts(List<Layout> layouts) {
         this.layouts = layouts;
     }
+
+    @Override
+    public String toString() {
+        return "PrintRequest(" + layouts + ")";
+    }
 }

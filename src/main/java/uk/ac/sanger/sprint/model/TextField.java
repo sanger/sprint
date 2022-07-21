@@ -38,4 +38,12 @@ public class TextField extends Field {
     public void setFontSize(float fontSize) {
         this.fontSize = fontSize;
     }
+
+    @Override
+    public String toString() {
+        return stringHelper()
+                .add("font", font)
+                .add("fontSize", fontSize)
+                .toString();
+    }
 }
