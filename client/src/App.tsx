@@ -1,5 +1,5 @@
 import React from "react";
-import { ApolloProvider } from "@apollo/react-hooks";
+import { ApolloProvider } from "react-apollo";
 import ApolloClient from "apollo-boost";
 
 import SprintPlanning from "./components/SprintPlanning";
