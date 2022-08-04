@@ -1,4 +1,4 @@
-import toCanvas from "bwip-js/browser-bwipjs";
+import bwipjs, {ToBufferOptions} from 'bwip-js'
 import { memoize } from "lodash";
 
 import IBarcodeGenerator from "./IBarcodeGenerator";
@@ -24,21 +24,21 @@ const bwipBarcodeGenerator: IBarcodeGenerator = (
     // Create a tmp canvas to draw the barcode and then convert that to an image...
     const detachedCanvas = document.createElement("canvas");
 
-    let options: BwipJs.ToCanvasOptions = {
+    let options: ToBufferOptions = {
       bcid: getBarcodeType(canvasBarcodeField), // Barcode type
       text: canvasBarcodeField.canvasValue, // Text to encode
       scale: 1,
       width: canvasBarcodeField.drawnWidth / SCALING_FACTOR,
       height: canvasBarcodeField.drawnHeight / SCALING_FACTOR
     };
-
-    toCanvas(detachedCanvas, options, function(err, cvs) {
-      if (err) {
-        reject(err);
-      } else if (cvs) {
-        resolve(cvs.toDataURL("image/png"));
+    try{
+      const canvas = bwipjs.toCanvas(detachedCanvas, options);
+      if(canvas) {
+        resolve(canvas.toDataURL("image/png"))
       }
-    });
+    } catch(e) {
+      reject(e);
+    }
   });
 };
 

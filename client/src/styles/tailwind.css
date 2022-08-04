@@ -1,11 +1,10 @@
 /* purgecss start ignore */
 @tailwind base;
-
 body {
     background-image: linear-gradient(15deg, #EC407A, #4A148C 75%);
 }
 
-h1,h2,h3,h4,h5,h6 {
+h1, h2, h3, h4, h5, h6 {
     font-family: 'Helvetica Neue', 'Arial', sans-serif;
 }
 
@@ -75,7 +74,7 @@ svg.logo.loading1 rect:nth-child(3n+1) {
 }
 
 .btn {
-    @apply p-2 bg-sanger-blue text-white border-b-2 border-sanger-blue-dark font-medium tracking-wider rounded-sm shadow-md rounded
+    @apply p-2 text-white bg-sanger-blue border-b-2 border-sanger-blue-dark font-medium tracking-wider rounded-sm shadow-md rounded
 }
 
 .btn-transition {
@@ -105,6 +104,5 @@ svg.rotate-c:hover {
 .border-box {
     box-sizing: border-box;
 }
-
 /* purgecss end ignore */
 @tailwind utilities;
