@@ -22,14 +22,10 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 8
-
-    - name: Export node version
-      id: node_version
-      run: echo ::set-output name=NODE_VERSION::$(cat .nvmrc)
         
-    - uses: actions/setup-node@v2
+    - uses: actions/setup-node@v1
       with:
-        node-version: ${{ steps.node_version.outputs.NODE_VERSION }}
+        node-version: '14.x'
 
     - uses: actions/cache@v2
       with:
