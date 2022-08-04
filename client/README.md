@@ -17,6 +17,8 @@ The project was bootstrapped with [Create React App](https://github.com/facebook
 yarn install
 ```
 
+(`yarn install --ignore-engines` might avoid some versioning errors.)
+
 ## Getting Started
 
 ```
