@@ -104,6 +104,8 @@ input Layout {
     barcodeFields: [BarcodeField!]
     # The text fields on the label
     textFields: [TextField!]
+    # The key fields for the label
+    keyFields: [KeyField!]
     # Optionally override the label size for this label. This is compulsory if the printer you are printing to
     # is not in config.
     labelSize: LabelSize
@@ -150,5 +152,13 @@ input TextField {
     # The font size in mm
     fontSize: Float!
     # The value of this text
+    value: String!
+}
+
+# A key and value
+input KeyField {
+    # The key
+    key: String!
+    # The value
     value: String!
 }

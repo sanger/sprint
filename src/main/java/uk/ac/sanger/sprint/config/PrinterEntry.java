@@ -11,6 +11,7 @@ class PrinterEntry {
     private String hostname;
     private String labelType;
     private String printerType;
+    private String path;
 
     public String getHostname() {
         return this.hostname;
@@ -34,5 +35,13 @@ class PrinterEntry {
 
     public void setPrinterType(String printerType) {
         this.printerType = printerType;
+    }
+
+    public String getPath() {
+        return this.path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 }

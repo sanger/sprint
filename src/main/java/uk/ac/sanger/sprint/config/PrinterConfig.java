@@ -1,5 +1,6 @@
 package uk.ac.sanger.sprint.config;
 
+import org.springframework.context.annotation.Bean;
 import uk.ac.sanger.sprint.model.LabelType;
 import uk.ac.sanger.sprint.model.PrinterType;
 

@@ -1,5 +1,8 @@
 package uk.ac.sanger.sprint.utils;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
  * @author dr6
  */
@@ -22,5 +25,13 @@ public class BasicUtils {
             return StringRepr.repr((char) o);
         }
         return o.toString();
+    }
+
+    public static <E> List<E> nullToEmpty(List<E> list) {
+        return (list==null ? Collections.emptyList() : list);
+    }
+
+    public static String nullToEmpty(String string) {
+        return (string==null ? "" : string);
     }
 }

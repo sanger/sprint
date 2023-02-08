@@ -1,9 +1,7 @@
 package uk.ac.sanger.sprint.service.protocol;
 
 import org.mockito.Mock;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 import uk.ac.sanger.sprint.model.*;
 
 import java.io.IOException;
@@ -11,7 +9,7 @@ import java.io.IOException;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
+import static org.mockito.MockitoAnnotations.openMocks;
 import static org.testng.Assert.assertNotNull;
 
 /**
@@ -32,20 +30,27 @@ public class FtpPrintProtocolAdapterTest {
 
     private FtpPrintProtocolAdapter adapter;
 
+    private AutoCloseable mocking;
+
     @BeforeClass
     private void setup() throws IOException {
         credentials = new Credentials("jeff", "swordfish");
         PrinterType printerType = new PrinterType("ftpprinter", PrinterLanguage.JSCRIPT, Protocol.FTP,
                 null, credentials, null);
         LabelType labelType = new LabelType(30, 12, 16, "tiny");
-        printer = new Printer("myprinter", printerType, labelType);
+        printer = new Printer("myprinter", printerType, labelType, null);
     }
 
     @BeforeMethod
     private void setupMocks() {
-        initMocks(this);
+        mocking = openMocks(this);
         when(mockFtpStoreFactory.getFTPStore(any(), any(), any())).thenReturn(mockFtpStore);
         adapter = new FtpPrintProtocolAdapter(printer, mockFtpStoreFactory, IPADDRESS);
+    }
+
+    @AfterMethod
+    private void releaseMocks() throws Exception {
+        mocking.close();
     }
 
     @Test

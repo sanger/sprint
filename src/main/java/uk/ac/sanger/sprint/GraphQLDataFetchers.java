@@ -85,9 +85,9 @@ public class GraphQLDataFetchers {
                 throw new IllegalArgumentException("Unknown printer without explicit printer type: "+printerName);
             }
             if (printer==null) {
-                printer = new Printer(printerName, printerType, null);
+                printer = new Printer(printerName, printerType, null, null);
             } else if (printerType!=null) {
-                printer = new Printer(printer.getHostname(), printerType, printer.getLabelType());
+                printer = new Printer(printer.getHostname(), printerType, printer.getLabelType(), null);
             }
 
             String jobId = printService.print(req, printer);

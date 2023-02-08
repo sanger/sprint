@@ -2,8 +2,9 @@ package uk.ac.sanger.sprint.model;
 
 import com.google.common.base.MoreObjects;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+
+import static uk.ac.sanger.sprint.utils.BasicUtils.nullToEmpty;
 
 /**
  * The contents of one label in a print request.
@@ -11,6 +12,7 @@ import java.util.List;
 public class Layout {
     private List<TextField> textFields = Collections.emptyList();
     private List<BarcodeField> barcodeFields = Collections.emptyList();
+    private List<KeyField> keyFields = Collections.emptyList();
     private LabelSize labelSize;
 
     /**
@@ -26,7 +28,7 @@ public class Layout {
      * @param textFields the new text fields in this layout
      */
     public void setTextFields(List<TextField> textFields) {
-        this.textFields = textFields;
+        this.textFields = nullToEmpty(textFields);
     }
 
     /**
@@ -42,7 +44,23 @@ public class Layout {
      * @param barcodeFields the new barcode fields in this layout
      */
     public void setBarcodeFields(List<BarcodeField> barcodeFields) {
-        this.barcodeFields = barcodeFields;
+        this.barcodeFields = nullToEmpty(barcodeFields);
+    }
+
+    /**
+     * Gets the key fields in this layout
+     * @return the key fields in this layout
+     */
+    public List<KeyField> getKeyFields() {
+        return this.keyFields;
+    }
+
+    /**
+     * Sets the key fields in this layout
+     * @param keyFields the key fields in this layout
+     */
+    public void setKeyFields(List<KeyField> keyFields) {
+        this.keyFields = nullToEmpty(keyFields);
     }
 
     /**
@@ -62,12 +80,41 @@ public class Layout {
         this.labelSize = labelSize;
     }
 
+    /**
+     * Creates a new layout with the given keyfields
+     * @param keyFields the keyfields for the layout
+     * @return a new layout with the given keyfields
+     */
+    public static Layout ofKeyFields(List<KeyField> keyFields) {
+        Layout ly = new Layout();
+        ly.setKeyFields(keyFields);
+        return ly;
+    }
+
+    /**
+     * Creates a new layout with the given strings as keyfields
+     * @param keysValues the keys and values for the fields, alternating key then value
+     * @return a new layout with the given keyfields
+     * @exception IllegalArgumentException if an odd number of <tt>keysValues</tt> is given
+     */
+    public static Layout ofKeyFields(String... keysValues) {
+        if (keysValues.length%2!=0) {
+            throw new IllegalArgumentException("Expected an even number for keysValues");
+        }
+        List<KeyField> keyFields = new ArrayList<>(keysValues.length/2);
+        for (int i = 0; i < keysValues.length; i += 2) {
+            keyFields.add(new KeyField(keysValues[i], keysValues[i+1]));
+        }
+        return ofKeyFields(keyFields);
+    }
+
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
                 .add("labelSize", labelSize)
                 .add("textFields", textFields)
                 .add("barcodeFields", barcodeFields)
+                .add("keyFields", keyFields)
                 .toString();
     }
 }

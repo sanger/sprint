@@ -2,8 +2,7 @@ package uk.ac.sanger.sprint.service;
 
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 import uk.ac.sanger.sprint.model.*;
 import uk.ac.sanger.sprint.service.language.PrinterLanguageAdapter;
 import uk.ac.sanger.sprint.service.language.PrinterLanguageAdapterFactory;
@@ -18,7 +17,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
+import static org.mockito.MockitoAnnotations.openMocks;
 import static org.testng.Assert.*;
 
 /**
@@ -49,10 +48,11 @@ public class PrintServiceTest {
     private PrintService service;
 
     private final String printCode = "MyPrintCode";
+    private AutoCloseable mocking;
 
     @BeforeMethod
     private void setupMocks() {
-        initMocks(this);
+        mocking = openMocks(this);
         when(mockLanguageAdapterFactory.getLanguageAdapter(any())).thenReturn(mockLanguageAdapter);
         when(mockProtocolAdapterFactory.getPrintProtocolAdapter(any())).thenReturn(mockProtocolAdapter);
         when(mockStatusAdapterFactory.getStatusProtocolAdapter(any())).thenReturn(mockStatusAdapter);
@@ -60,6 +60,11 @@ public class PrintServiceTest {
         when(mockLanguageAdapter.transcribe(any(), any())).thenReturn(printCode);
 
         service = new PrintServiceImplementation(mockLanguageAdapterFactory, mockProtocolAdapterFactory, mockStatusAdapterFactory);
+    }
+
+    @AfterMethod
+    private void releaseMocks() throws Exception {
+        mocking.close();
     }
 
     private void mockPrinter(StatusProtocol statusProtocol) {
