@@ -1,9 +1,8 @@
 package uk.ac.sanger.sprint.service;
 
+import org.junit.jupiter.api.*;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 import uk.ac.sanger.sprint.model.*;
 import uk.ac.sanger.sprint.service.language.PrinterLanguageAdapter;
 import uk.ac.sanger.sprint.service.language.PrinterLanguageAdapterFactory;
@@ -14,18 +13,17 @@ import uk.ac.sanger.sprint.service.status.StatusProtocolAdapterFactory;
 
 import java.io.IOException;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
-import static org.testng.Assert.*;
+import static org.mockito.MockitoAnnotations.openMocks;
 
 /**
  * Tests for {@link PrintService}
  * @author dr6
  */
-@Test
 public class PrintServiceTest {
     @Mock
     private PrinterLanguageAdapterFactory mockLanguageAdapterFactory;
@@ -49,10 +47,11 @@ public class PrintServiceTest {
     private PrintService service;
 
     private final String printCode = "MyPrintCode";
+    private AutoCloseable mocking;
 
-    @BeforeMethod
-    private void setupMocks() {
-        initMocks(this);
+    @BeforeEach
+    void setupMocks() {
+        mocking = openMocks(this);
         when(mockLanguageAdapterFactory.getLanguageAdapter(any())).thenReturn(mockLanguageAdapter);
         when(mockProtocolAdapterFactory.getPrintProtocolAdapter(any())).thenReturn(mockProtocolAdapter);
         when(mockStatusAdapterFactory.getStatusProtocolAdapter(any())).thenReturn(mockStatusAdapter);
@@ -60,6 +59,11 @@ public class PrintServiceTest {
         when(mockLanguageAdapter.transcribe(any(), any())).thenReturn(printCode);
 
         service = new PrintServiceImplementation(mockLanguageAdapterFactory, mockProtocolAdapterFactory, mockStatusAdapterFactory);
+    }
+
+    @AfterEach
+    void closeMocks() throws Exception {
+        mocking.close();
     }
 
     private void mockPrinter(StatusProtocol statusProtocol) {

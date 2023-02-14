@@ -1,31 +1,27 @@
 package uk.ac.sanger.sprint.service.protocol;
 
+import org.junit.jupiter.api.*;
 import org.springframework.boot.ApplicationArguments;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
-import uk.ac.sanger.sprint.model.Printer;
-import uk.ac.sanger.sprint.model.PrinterLanguage;
-import uk.ac.sanger.sprint.model.PrinterType;
-import uk.ac.sanger.sprint.model.Protocol;
+import uk.ac.sanger.sprint.model.*;
 import uk.ac.sanger.sprint.service.language.PrinterLanguageAdapterFactory;
 
 import java.util.Collections;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
 
 /**
  * Tests for the implementation of {@link PrinterLanguageAdapterFactory}
  * @author dr6
  */
-@Test
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class PrintProtocolAdapterFactoryTest {
     private PrintProtocolAdapterFactory protocolAdapterFactory;
 
-    @BeforeMethod
-    private void setup() {
+    @BeforeEach
+    void setup() {
         ApplicationArguments mockApplicationArguments = mock(ApplicationArguments.class);
         when(mockApplicationArguments.getOptionValues("ipAddress")).thenReturn(Collections.singletonList("1.2.3.4"));
         protocolAdapterFactory = new PrintProtocolAdapterFactoryImplementation(null, mockApplicationArguments);

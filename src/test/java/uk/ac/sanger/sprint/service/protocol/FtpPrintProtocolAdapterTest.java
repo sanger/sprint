@@ -1,24 +1,21 @@
 package uk.ac.sanger.sprint.service.protocol;
 
+import org.junit.jupiter.api.*;
 import org.mockito.Mock;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 import uk.ac.sanger.sprint.model.*;
 
 import java.io.IOException;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
-import static org.testng.Assert.assertNotNull;
-
+import static org.mockito.MockitoAnnotations.openMocks;
 /**
  * Tests for the {@link FtpPrintProtocolAdapter}
  * @author dr6
  */
-@Test
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class FtpPrintProtocolAdapterTest {
     private static final String IPADDRESS = "1.2.3.4";
 
@@ -31,9 +28,10 @@ public class FtpPrintProtocolAdapterTest {
     private Printer printer;
 
     private FtpPrintProtocolAdapter adapter;
+    private AutoCloseable mocking;
 
-    @BeforeClass
-    private void setup() throws IOException {
+    @BeforeAll
+    void setup() throws IOException {
         credentials = new Credentials("jeff", "swordfish");
         PrinterType printerType = new PrinterType("ftpprinter", PrinterLanguage.JSCRIPT, Protocol.FTP,
                 null, credentials, null);
@@ -41,11 +39,16 @@ public class FtpPrintProtocolAdapterTest {
         printer = new Printer("myprinter", printerType, labelType);
     }
 
-    @BeforeMethod
-    private void setupMocks() {
-        initMocks(this);
+    @BeforeEach
+    void setupMocks() {
+        mocking = openMocks(this);
         when(mockFtpStoreFactory.getFTPStore(any(), any(), any())).thenReturn(mockFtpStore);
         adapter = new FtpPrintProtocolAdapter(printer, mockFtpStoreFactory, IPADDRESS);
+    }
+
+    @AfterEach
+    void closeMocks() throws Exception {
+        mocking.close();
     }
 
     @Test

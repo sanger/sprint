@@ -1,7 +1,6 @@
 package uk.ac.sanger.sprint.service.language;
 
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.*;
 import uk.ac.sanger.sprint.model.*;
 
 import java.util.Arrays;
@@ -9,18 +8,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests for the {@link JScriptAdapter}.
  * @author dr6
  */
-@Test
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class JScriptAdapterTest {
     private JScriptAdapter adapter;
 
-    @BeforeClass
-    private void setup() {
+    @BeforeAll
+    void setup() {
         LabelType labelType = new LabelType(30, 12, 16, "tiny");
         adapter = new JScriptAdapter(labelType);
     }

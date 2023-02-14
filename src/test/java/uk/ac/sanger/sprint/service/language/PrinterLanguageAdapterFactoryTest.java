@@ -1,25 +1,21 @@
 package uk.ac.sanger.sprint.service.language;
 
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
-import uk.ac.sanger.sprint.model.Printer;
-import uk.ac.sanger.sprint.model.PrinterLanguage;
-import uk.ac.sanger.sprint.model.PrinterType;
-import uk.ac.sanger.sprint.model.Protocol;
+import org.junit.jupiter.api.*;
+import uk.ac.sanger.sprint.model.*;
 
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests for the implementation of {@link PrinterLanguageAdapterFactory}
  * @author dr6
  */
-@Test
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class PrinterLanguageAdapterFactoryTest {
     private PrinterLanguageAdapterFactory languageAdapterFactory;
 
-    @BeforeClass
-    private void setup() {
+    @BeforeAll
+    void setup() {
         languageAdapterFactory = new PrinterLanguageAdapterFactoryImplementation();
     }
 
