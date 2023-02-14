@@ -19,6 +19,8 @@
     </properties>
 
     <dependencies>
+        <!-- newer versions require a later version of Java -->
+        <!--suppress VulnerableLibrariesLocal -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -49,10 +51,22 @@
         </dependency>
 
         <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+            <version>1.10.0</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.graphql-java-kickstart</groupId>
             <artifactId>graphiql-spring-boot-starter</artifactId>
             <version>11.1.0</version>
             <scope>runtime</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.commons</groupId>
+                    <artifactId>commons-text</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -67,10 +81,11 @@
             <version>3.9.0</version>
         </dependency>
 
+        <!-- newer versions require a later version of Java -->
+        <!--suppress VulnerableLibrariesLocal -->
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
-            <!--suppress MavenPackageUpdate -->
             <version>7.5</version>
             <scope>test</scope>
         </dependency>
