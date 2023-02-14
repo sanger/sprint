@@ -1,7 +1,6 @@
 package uk.ac.sanger.sprint.config;
 
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.*;
 import uk.ac.sanger.sprint.model.*;
 
 import javax.xml.bind.JAXBException;
@@ -11,15 +10,15 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.testng.Assert.*;
 
 /**
  * Tests for the {@link ConfigLoaderImplementation}.
  * @author dr6
  */
-@Test
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ConfigLoaderTest {
     private ConfigLoader configLoader;
     private List<Path> paths;
@@ -27,8 +26,8 @@ public class ConfigLoaderTest {
     private List<LabelType> labelTypes;
     private List<Printer> printers;
 
-    @BeforeClass
-    private void setup() {
+    @BeforeAll
+    void setup() {
         AppConfig appConfig = mock(AppConfig.class);
         when(appConfig.getVolume()).thenReturn("mnt/sprint");
         printerTypes = Arrays.asList(

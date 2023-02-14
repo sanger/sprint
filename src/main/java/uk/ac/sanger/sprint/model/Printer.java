@@ -2,6 +2,7 @@ package uk.ac.sanger.sprint.model;
 
 import com.google.common.base.MoreObjects;
 
+import javax.xml.bind.annotation.XmlTransient;
 import java.nio.file.Path;
 import java.util.Objects;
 
@@ -85,6 +86,7 @@ public class Printer {
         return (hostname.indexOf('.') < 0) ? hostname + ".internal.sanger.ac.uk" : hostname;
     }
 
+    @XmlTransient
     public Path getPath() {
         return this.path;
     }

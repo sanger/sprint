@@ -1,8 +1,8 @@
 package uk.ac.sanger.sprint.service;
 
+import org.junit.jupiter.api.*;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.testng.annotations.*;
 import uk.ac.sanger.sprint.model.*;
 import uk.ac.sanger.sprint.service.language.PrinterLanguageAdapter;
 import uk.ac.sanger.sprint.service.language.PrinterLanguageAdapterFactory;
@@ -13,18 +13,17 @@ import uk.ac.sanger.sprint.service.status.StatusProtocolAdapterFactory;
 
 import java.io.IOException;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
-import static org.testng.Assert.*;
 
 /**
  * Tests for {@link PrintService}
  * @author dr6
  */
-@Test
 public class PrintServiceTest {
     @Mock
     private PrinterLanguageAdapterFactory mockLanguageAdapterFactory;
@@ -50,8 +49,8 @@ public class PrintServiceTest {
     private final String printCode = "MyPrintCode";
     private AutoCloseable mocking;
 
-    @BeforeMethod
-    private void setupMocks() {
+    @BeforeEach
+    void setupMocks() {
         mocking = openMocks(this);
         when(mockLanguageAdapterFactory.getLanguageAdapter(any())).thenReturn(mockLanguageAdapter);
         when(mockProtocolAdapterFactory.getPrintProtocolAdapter(any())).thenReturn(mockProtocolAdapter);
@@ -62,8 +61,8 @@ public class PrintServiceTest {
         service = new PrintServiceImplementation(mockLanguageAdapterFactory, mockProtocolAdapterFactory, mockStatusAdapterFactory);
     }
 
-    @AfterMethod
-    private void releaseMocks() throws Exception {
+    @AfterEach
+    void closeMocks() throws Exception {
         mocking.close();
     }
 

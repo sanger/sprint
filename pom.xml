@@ -80,16 +80,6 @@
             <artifactId>commons-net</artifactId>
             <version>3.9.0</version>
         </dependency>
-
-        <!-- newer versions require a later version of Java -->
-        <!--suppress VulnerableLibrariesLocal -->
-        <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <version>7.5</version>
-            <scope>test</scope>
-        </dependency>
-
     </dependencies>
 
     <build>

@@ -1,7 +1,7 @@
 package uk.ac.sanger.sprint.service.protocol;
 
+import org.junit.jupiter.api.*;
 import org.springframework.util.FileSystemUtils;
-import org.testng.annotations.*;
 import uk.ac.sanger.sprint.model.Printer;
 
 import java.io.IOException;
@@ -10,19 +10,20 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
 
 /** Test {@link VolumeProtocolAdapter} */
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class VolumeProtocolAdapterTest {
     String expectedFilename;
     Path printerPath;
     VolumeProtocolAdapter adapter;
 
-    @BeforeClass
-    public void setup() throws IOException {
+    @BeforeAll
+    void setup() throws IOException {
         Printer printer = mock(Printer.class);
         printerPath = Paths.get("volumeProtocolAdapterTestDir");
         when(printer.getPath()).thenReturn(printerPath);
@@ -33,7 +34,7 @@ public class VolumeProtocolAdapterTest {
         Files.createDirectory(printerPath);
     }
 
-    @AfterClass
+    @AfterAll
     public void tearDown() throws IOException {
         FileSystemUtils.deleteRecursively(printerPath);
     }

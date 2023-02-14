@@ -1,24 +1,23 @@
 package uk.ac.sanger.sprint.service.protocol;
 
 import org.apache.commons.net.ftp.FTPClient;
+import org.junit.jupiter.api.*;
 import org.mockito.InOrder;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
-import static org.testng.Assert.*;
 
 /**
  * Tests for {@link FTPStore}
  * @author dr6
  */
-@Test
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class FTPStoreTest {
     private final String HOST = "myhost", USER = "myuser", PW = "mypw", IPADDRESS = "1.2.3.4";
     private final int TIMEOUT = 1500;
@@ -28,8 +27,8 @@ public class FTPStoreTest {
     private int contentLength;
     private byte[] contentBytes = new byte[32];
 
-    @BeforeMethod
-    private void setupMocks() {
+    @BeforeEach
+    void setupMocks() {
         ftpStore = new FTPStore(HOST, USER, PW, IPADDRESS);
         mockFtpClient = mock(FTPClient.class);
         ftpStore.setFtpClientSupplier(() -> mockFtpClient);

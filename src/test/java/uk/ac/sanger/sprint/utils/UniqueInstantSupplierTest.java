@@ -1,20 +1,21 @@
 package uk.ac.sanger.sprint.utils;
 
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.time.*;
 import java.util.stream.IntStream;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests {@link UniqueInstantSupplier}
  */
 public class UniqueInstantSupplierTest {
-    @Test(dataProvider = "clocks")
-    public void testNewInstant(Clock clock) {
+    @ParameterizedTest
+    @ValueSource(booleans={false,true})
+    public void testNewInstant(boolean fixedClock) {
+        final Clock clock = (fixedClock ? Clock.fixed(Instant.now(), ZoneOffset.UTC) : Clock.systemUTC());
         final Instant start = clock.instant();
         UniqueInstantSupplier uts = new UniqueInstantSupplier(clock);
         Instant[] instants = IntStream.range(0,3)
@@ -35,19 +36,13 @@ public class UniqueInstantSupplierTest {
 
     private static void assertBefore(Instant a, Instant b) {
         if (!a.isBefore(b)) {
-            fail(a+" should be before "+b);
+            throw new AssertionError(a+" should be before "+b);
         }
     }
 
     private static void assertNotBefore(Instant a, Instant b) {
         if (a.isBefore(b)) {
-            fail(a+" should be after or equal to "+b);
+            throw new AssertionError(a+" should be after or equal to "+b);
         }
     }
-
-    @DataProvider(name="clocks")
-    public Object[][] clocks() {
-        return new Object[][]{ {Clock.systemUTC()}, {Clock.fixed(Instant.now(), ZoneOffset.UTC)} };
-    }
-
 }

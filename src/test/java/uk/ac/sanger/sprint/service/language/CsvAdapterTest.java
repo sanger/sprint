@@ -1,13 +1,14 @@
 package uk.ac.sanger.sprint.service.language;
 
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import uk.ac.sanger.sprint.model.*;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /** Test {@link CsvAdapter} */
 public class CsvAdapterTest {
@@ -34,19 +35,15 @@ public class CsvAdapterTest {
         assertEquals(line, "Alpha,,,Alpha Beta,Gamma Delta");
     }
 
-    @Test(dataProvider="sanitiseValueArgs")
+    @ParameterizedTest
+    @CsvSource(delimiter=';', value = {
+            "'';''",
+            ";''",
+            "Alpha, Beta; Alpha Beta",
+            "'Alpha\nBeta'; Alpha Beta",
+            "'Alpha\t,\n   Beta'; Alpha Beta",
+    })
     public void testSanitiseValue(String input, String expected) {
         assertEquals(adapter.sanitiseValue(input), expected);
-    }
-
-    @DataProvider(name="sanitiseValueArgs")
-    Object[][] sanitiseValueArgs() {
-        return new Object[][] {
-                { "", "" },
-                { null, "" },
-                { "Alpha, Beta", "Alpha Beta"},
-                { "Alpha\nBeta", "Alpha Beta"},
-                { "Alpha\t,\n   Beta", "Alpha Beta"},
-        };
     }
 }

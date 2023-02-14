@@ -1,6 +1,6 @@
 package uk.ac.sanger.sprint.service.protocol;
 
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
@@ -8,7 +8,7 @@ import java.io.IOException;
  * Tests for the {@link StubPrintProtocolAdapter}
  * @author dr6
  */
-@Test
+
 public class StubPrintProtocolAdapterTest {
     @Test
     public void testPrint() throws IOException {
