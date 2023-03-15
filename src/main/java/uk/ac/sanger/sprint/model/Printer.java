@@ -2,6 +2,8 @@ package uk.ac.sanger.sprint.model;
 
 import com.google.common.base.MoreObjects;
 
+import javax.xml.bind.annotation.XmlTransient;
+import java.nio.file.Path;
 import java.util.Objects;
 
 /**
@@ -11,6 +13,7 @@ public class Printer {
     private String hostname;
     private LabelType labelType;
     private PrinterType printerType;
+    private Path path;
 
     /**
      * Constructs a new printer with default values for every field
@@ -22,11 +25,13 @@ public class Printer {
      * @param hostname the hostname of the printer
      * @param printerType the type of printer
      * @param labelType the type of label supported by the printer
+     * @param path the file path for this printer
      */
-    public Printer(String hostname, PrinterType printerType, LabelType labelType) {
+    public Printer(String hostname, PrinterType printerType, LabelType labelType, Path path) {
         this.hostname = hostname;
         this.printerType = printerType;
         this.labelType = labelType;
+        this.path = path;
     }
 
     /**
@@ -81,12 +86,22 @@ public class Printer {
         return (hostname.indexOf('.') < 0) ? hostname + ".internal.sanger.ac.uk" : hostname;
     }
 
+    @XmlTransient
+    public Path getPath() {
+        return this.path;
+    }
+
+    public void setPath(Path path) {
+        this.path = path;
+    }
+
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
                 .add("hostname", hostname)
                 .add("labelType", labelType)
                 .add("printerType", printerType)
+                .add("path", path)
                 .toString();
     }
 
@@ -97,11 +112,12 @@ public class Printer {
         Printer that = (Printer) o;
         return (Objects.equals(this.hostname, that.hostname)
                 && Objects.equals(this.labelType, that.labelType)
-                && Objects.equals(this.printerType, that.printerType));
+                && Objects.equals(this.printerType, that.printerType)
+                && Objects.equals(this.path, that.path));
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(hostname);
+        return (hostname==null ? 0 : hostname.hashCode());
     }
 }

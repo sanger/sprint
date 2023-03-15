@@ -9,8 +9,11 @@ public class PrinterLanguageAdapterFactoryImplementation implements PrinterLangu
     @Override
     public PrinterLanguageAdapter getLanguageAdapter(Printer printer) {
         PrinterLanguage language = printer.getPrinterType().getLanguage();
-        if (language == PrinterLanguage.JSCRIPT) {
-            return new JScriptAdapter(printer);
+        if (language!=null) {
+            switch (language) {
+                case JSCRIPT: return new JScriptAdapter(printer);
+                case CSV: return new CsvAdapter(",");
+            }
         }
         throw new UnsupportedOperationException("Unsupported printer language: "+language);
     }

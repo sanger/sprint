@@ -28,6 +28,7 @@ public class FtpPrintProtocolAdapterTest {
     private Printer printer;
 
     private FtpPrintProtocolAdapter adapter;
+
     private AutoCloseable mocking;
 
     @BeforeAll
@@ -36,7 +37,7 @@ public class FtpPrintProtocolAdapterTest {
         PrinterType printerType = new PrinterType("ftpprinter", PrinterLanguage.JSCRIPT, Protocol.FTP,
                 null, credentials, null);
         LabelType labelType = new LabelType(30, 12, 16, "tiny");
-        printer = new Printer("myprinter", printerType, labelType);
+        printer = new Printer("myprinter", printerType, labelType, null);
     }
 
     @BeforeEach

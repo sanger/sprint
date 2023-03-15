@@ -11,6 +11,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Tests for the {@link ConfigLoaderImplementation}.
@@ -26,6 +28,8 @@ public class ConfigLoaderTest {
 
     @BeforeAll
     void setup() {
+        AppConfig appConfig = mock(AppConfig.class);
+        when(appConfig.getVolume()).thenReturn("mnt/sprint");
         printerTypes = Arrays.asList(
                 new PrinterType("PT0", PrinterLanguage.JSCRIPT, Protocol.FTP, null, new Credentials("alpha", "beta"),
                         new Credentials("gamma", "delta")),
@@ -36,13 +40,13 @@ public class ConfigLoaderTest {
                 new LabelType(12, 22, 32, "lt1")
         );
         printers = Arrays.asList(
-                new Printer("p0", printerTypes.get(0), labelTypes.get(0)),
-                new Printer("p1", printerTypes.get(0), labelTypes.get(1)),
-                new Printer("p2", printerTypes.get(1), labelTypes.get(0))
+                new Printer("p0", printerTypes.get(0), labelTypes.get(0), null),
+                new Printer("p1", printerTypes.get(0), labelTypes.get(1), null),
+                new Printer("p2", printerTypes.get(1), labelTypes.get(0), null)
         );
 
         paths = Arrays.asList(Paths.get("printers", "printers.xml"), Paths.get("boo"));
-        configLoader = new ConfigLoaderImplementation(this::loadPrinterConfig);
+        configLoader = new ConfigLoaderImplementation(appConfig, this::loadPrinterConfig);
     }
 
     private static PrinterEntry entry(Printer printer) {

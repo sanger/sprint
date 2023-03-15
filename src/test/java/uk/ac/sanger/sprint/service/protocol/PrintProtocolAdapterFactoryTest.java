@@ -4,7 +4,9 @@ import org.junit.jupiter.api.*;
 import org.springframework.boot.ApplicationArguments;
 import uk.ac.sanger.sprint.model.*;
 import uk.ac.sanger.sprint.service.language.PrinterLanguageAdapterFactory;
+import uk.ac.sanger.sprint.utils.UniqueInstantSupplier;
 
+import java.time.Clock;
 import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -24,12 +26,13 @@ public class PrintProtocolAdapterFactoryTest {
     void setup() {
         ApplicationArguments mockApplicationArguments = mock(ApplicationArguments.class);
         when(mockApplicationArguments.getOptionValues("ipAddress")).thenReturn(Collections.singletonList("1.2.3.4"));
-        protocolAdapterFactory = new PrintProtocolAdapterFactoryImplementation(null, mockApplicationArguments);
+        UniqueInstantSupplier instantSupplier = new UniqueInstantSupplier(Clock.systemUTC());
+        protocolAdapterFactory = new PrintProtocolAdapterFactoryImplementation(null, mockApplicationArguments, instantSupplier);
     }
 
     private Printer printer(Protocol protocol) {
         PrinterType pt = new PrinterType("mypt", PrinterLanguage.JSCRIPT, protocol, null, null, null);
-        return new Printer("myprinter", pt, null);
+        return new Printer("myprinter", pt, null, null);
     }
 
     @Test
@@ -37,6 +40,13 @@ public class PrintProtocolAdapterFactoryTest {
         PrintProtocolAdapter adapter = protocolAdapterFactory.getPrintProtocolAdapter(printer(Protocol.FTP));
         assertNotNull(adapter);
         assertTrue(adapter instanceof FtpPrintProtocolAdapter);
+    }
+
+    @Test
+    public void testVolume() {
+        PrintProtocolAdapter adapter = protocolAdapterFactory.getPrintProtocolAdapter(printer(Protocol.VOLUME));
+        assertNotNull(adapter);
+        assertTrue(adapter instanceof VolumeProtocolAdapter);
     }
 
     @Test
