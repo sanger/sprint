@@ -30,6 +30,8 @@ enum Rotation {
 type Query {
     # Get the list of printers, optionally filtered by label type
     printers(labelType: String): [Printer!]!
+    # Get the named printer, if it exists
+    printer(hostname: String!): Printer
     # Get the list of printer types
     printerTypes: [PrinterType!]!
     # Get the status of a print job

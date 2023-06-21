@@ -4,10 +4,7 @@ import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 import graphql.GraphQL;
 import graphql.schema.GraphQLSchema;
-import graphql.schema.idl.RuntimeWiring;
-import graphql.schema.idl.SchemaGenerator;
-import graphql.schema.idl.SchemaParser;
-import graphql.schema.idl.TypeDefinitionRegistry;
+import graphql.schema.idl.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
@@ -55,6 +52,7 @@ public class GraphQLProvider {
         return RuntimeWiring.newRuntimeWiring()
                 .type(newTypeWiring("Query")
                         .dataFetcher("printers", graphQLDataFetchers.getPrinters())
+                        .dataFetcher("printer", graphQLDataFetchers.getPrinter())
                         .dataFetcher("printerTypes", graphQLDataFetchers.getPrinterTypes())
                         .dataFetcher("printStatus", graphQLDataFetchers.getPrintStatus())
                         .dataFetcher("labelTypes", graphQLDataFetchers.getLabelTypes()))

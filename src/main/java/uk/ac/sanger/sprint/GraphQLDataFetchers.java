@@ -56,6 +56,13 @@ public class GraphQLDataFetchers {
         };
     }
 
+    public DataFetcher<Printer> getPrinter() {
+        return dfe -> {
+            String hostname = dfe.getArgument("hostname");
+            return config.getPrinters().get(hostname);
+        };
+    }
+
     private Printer getPrinter(String hostname) {
         Printer printer = config.getPrinters().get(hostname);
         if (printer==null) {
