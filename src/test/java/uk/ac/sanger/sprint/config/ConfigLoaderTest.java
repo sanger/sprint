@@ -2,12 +2,12 @@ package uk.ac.sanger.sprint.config;
 
 import org.junit.jupiter.api.*;
 import uk.ac.sanger.sprint.model.*;
+import uk.ac.sanger.sprint.utils.UCMap;
 
 import javax.xml.bind.JAXBException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -82,10 +82,8 @@ public class ConfigLoaderTest {
     @Test
     public void testLoadConfig() {
         Config config = configLoader.loadConfig(paths);
-        Map<String, PrinterType> printerTypeMap = printerTypes.stream()
-                .collect(Collectors.toMap(PrinterType::getName, Function.identity()));
-        Map<String, Printer> printerMap = printers.stream()
-                .collect(Collectors.toMap(Printer::getHostname, Function.identity()));
+        UCMap<PrinterType> printerTypeMap = UCMap.from(printerTypes, PrinterType::getName);
+        UCMap<Printer> printerMap = UCMap.from(printers, Printer::getHostname);
         assertEquals(config.getPrinterTypes(), printerTypeMap);
         assertEquals(config.getLabelTypes().size(), labelTypes.size());
         assertEquals(new HashSet<>(config.getLabelTypes()), new HashSet<>(labelTypes));

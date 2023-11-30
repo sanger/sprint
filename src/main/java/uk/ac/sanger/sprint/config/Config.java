@@ -1,20 +1,20 @@
 package uk.ac.sanger.sprint.config;
 
 import uk.ac.sanger.sprint.model.*;
+import uk.ac.sanger.sprint.utils.UCMap;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * The config for the application.
  * The printers, printer types and label types, with references to each other.
  */
 public class Config {
-    private Map<String, Printer> printers;
-    private List<LabelType> labelTypes;
-    private Map<String, PrinterType> printerTypes;
+    private final UCMap<Printer> printers;
+    private final List<LabelType> labelTypes;
+    private final UCMap<PrinterType> printerTypes;
 
-    public Config(Map<String, Printer> printers, List<LabelType> labelTypes, Map<String, PrinterType> printerTypes) {
+    public Config(UCMap<Printer> printers, List<LabelType> labelTypes, UCMap<PrinterType> printerTypes) {
         this.printers = printers;
         this.labelTypes = labelTypes;
         this.printerTypes = printerTypes;
@@ -24,7 +24,7 @@ public class Config {
      * The map from printer hostname to printer.
      * @return a map from hostname to printer
      */
-    public Map<String, Printer> getPrinters() {
+    public UCMap<Printer> getPrinters() {
         return printers;
     }
 
@@ -40,7 +40,7 @@ public class Config {
      * The map from printer type name to printer type.
      * @return a map from name to printer type
      */
-    public Map<String, PrinterType> getPrinterTypes() {
+    public UCMap<PrinterType> getPrinterTypes() {
         return printerTypes;
     }
 }

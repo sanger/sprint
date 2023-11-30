@@ -3,6 +3,7 @@ package uk.ac.sanger.sprint.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.ac.sanger.sprint.model.*;
+import uk.ac.sanger.sprint.utils.UCMap;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
@@ -59,14 +60,14 @@ class ConfigLoaderImplementation implements ConfigLoader {
         final Map<String, LabelType> labelTypes = configs.stream()
                 .flatMap(cf -> cf.getLabelTypes().stream())
                 .collect(Collectors.toMap(LabelType::getName, Function.identity()));
-        final Map<String, PrinterType> printerTypes = configs.stream()
+        UCMap<PrinterType> printerTypes = configs.stream()
                 .flatMap(cf -> cf.getPrinterTypes().stream())
-                .collect(Collectors.toMap(PrinterType::getName, Function.identity()));
+                .collect(UCMap.toUCMap(PrinterType::getName));
         final String volumePath = appConfig.getVolume();
-        Map<String, Printer> printers = configs.stream()
+        UCMap<Printer> printers = configs.stream()
                 .flatMap(cf -> cf.getEntries().stream())
                 .map(e -> toPrinter(e, printerTypes, labelTypes, volumePath))
-                .collect(Collectors.toMap(Printer::getHostname, Function.identity()));
+                .collect(UCMap.toUCMap(Printer::getHostname));
 
         for (Printer printer: printers.values()) {
             printer.getLabelType().getPrinters().add(printer);
