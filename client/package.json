@@ -5,7 +5,7 @@
   "private": true,
   "dependencies": {
     "@apollo/react-hooks": "^3.0.0",
-    "@babel/runtime": "^7.18.9",
+    "@babel/runtime": "^7.26.0",
     "@sanger/ui-styling": "^4.0.0",
     "@types/bwip-js": "^3.0.0",
     "@types/hookrouter": "^2.2.1",
